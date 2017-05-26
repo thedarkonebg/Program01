@@ -3,18 +3,36 @@ package com.altermovement.www.program01;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.view.MotionEvent;
 
 import java.util.Arrays;
 
+        
 public class Program01 extends AppCompatActivity {
-
+    
+   
+    public void hideSoftKeyboard() {
+        if(getCurrentFocus() !=null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+        else {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+    }
+    
+    /**
+     * Shows the soft keyboard
+     */
     private TextView bpm_tap;       // TEXT FIELD TAP BPM
-
+    
     // TAP BPM CALCULATION VARIABLES
 
     private static final int MAX_WAIT = 2000;
@@ -24,18 +42,24 @@ public class Program01 extends AppCompatActivity {
 
     private long[] mLastBeats = new long[8];
     private int mCurrentBeat;
-
+    private int bb;
     // TAP BPM CALCULATION VARIABLES
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+     
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_program01);
-
-    // CONVERSION BUTTONS
+    
+    
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+    
+    
+        // CONVERSION BUTTONS
 
     final Button button = (Button) findViewById(R.id.button);
     final Button calc_reset = (Button) findViewById(R.id.calc_reset);
+
 
     // CONVERSION TEXT INPUT OUTPUT FIELDS
 
@@ -43,15 +67,19 @@ public class Program01 extends AppCompatActivity {
     final EditText field2 = (EditText) findViewById(R.id.field2);
     final TextView change = (TextView) findViewById(R.id.change);
 
-    // RESET BUTTON
+        // RESET BUTTON
 
         calc_reset.setOnClickListener(new View.OnClickListener() {
+            
             @Override
             public void onClick(View v) {
+
+                hideSoftKeyboard();
                 field1.setText("");
                 field2.setText("");
                 change.setText(R.string.pitch1);
                 change.setTextColor(Color.WHITE);
+                
             }
 
         });
@@ -65,10 +93,10 @@ public class Program01 extends AppCompatActivity {
 
                 // CHECK FOR EMPTY FIELDS
                 // RETURNS ERROR IF FOUND
-
+                hideSoftKeyboard();
                 if ( (field1.getText().length()==0) || (field2.getText().length()==0) ) {
 
-                    String error = "ERROR !!!";
+                    String error = "INVALID BPM !!!";
                     change.setText(error);
                     change.setTextColor(Color.RED);
 
@@ -81,18 +109,35 @@ public class Program01 extends AppCompatActivity {
                     bpm1 = Double.parseDouble(field1.getText().toString());
                     bpm2 = Double.parseDouble(field2.getText().toString());
 
-                    bpmc = ((bpm2 / bpm1) - 1) * 100;
+                    if ( bpm2 / bpm1 <= 0.5 ) {
 
-                    if (bpmc > 0) {
-                        change.setText(String.format("+ %.3f", bpmc));
-                        change.setTextColor(Color.GREEN);   // POSITIVE NUMBERS = GREEN
-
-                    } else {
-                        change.setText(String.format("%.3f", bpmc));
-                        change.setTextColor(Color.RED);     // NEGATIVE NUMBERS = RED
-                    }
+                        String error1 = "TOO LOW !!!";
+                        change.setText(error1);
+                        change.setTextColor(Color.RED);
 
                     }
+
+                    else if (bpm2 / bpm1 >= 2) {
+                        String error1 = "TOO HIGH !!!";
+                        change.setText(error1);
+                        change.setTextColor(Color.RED);
+
+                    }
+
+                    else{
+
+                        bpmc = ((bpm2 / bpm1) - 1) * 100;
+
+                        if (bpmc > 0) {
+                            change.setText(String.format("+ %.3f", bpmc));
+                            change.setTextColor(Color.GREEN);   // POSITIVE NUMBERS = GREEN
+
+                        } else {
+                            change.setText(String.format("%.3f", bpmc));
+                            change.setTextColor(Color.RED);     // NEGATIVE NUMBERS = RED
+                        }
+                    }
+                }
 
             }
 
@@ -110,25 +155,25 @@ public class Program01 extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-
+                hideSoftKeyboard();
                 mLastBeats = new long[8];
                 mCurrentBeat = 0;
                 mPreviousBeat = 0;
-                bpm_tap.setText("TAP BPM");
+                bpm_tap.setText("BPM TAP");
 
             }
 
         });
 
         // TAP BPM BUTTON FUNCTION
-
+        
         findViewById(R.id.tap).setOnTouchListener(new View.OnTouchListener() {
-
             @Override
+            
             public boolean onTouch(View v, MotionEvent event) {
-
+                hideSoftKeyboard();
+                
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-
                     if (mPreviousBeat > 0) {
                         long beat = System.currentTimeMillis();
                         long diff = beat - mPreviousBeat;
@@ -153,15 +198,15 @@ public class Program01 extends AppCompatActivity {
                         long avgDiff = average(mLastBeats);
                         final int bpmt = (int) (60000 / avgDiff);
                         bpm_tap.setText(String.format("%d BPM", bpmt));
+                        bb = bpmt;
                     }
 
                     mPreviousBeat = System.currentTimeMillis();
-
+                    
                     return true;
                 }
 
                 return false;
-
 
             }
 
@@ -180,6 +225,37 @@ public class Program01 extends AppCompatActivity {
                 return sum / count;
             }
 
+        });
+    
+        // SEND TAP BPM TO BPM 1 BUTTON
+    
+        final Button sendbpm = (Button) findViewById(R.id.sendbpm);
+    
+        sendbpm.setOnClickListener(new View.OnClickListener() {
+        
+            @Override
+            public void onClick(View v) {
+                hideSoftKeyboard();
+            
+                if (bpm_tap.getText().equals("BPM TAP")) {
+                
+                    field1.setText("");
+                
+                }
+            
+                else    if (bpm_tap.getText().length() == 0) {
+                
+                    field1.setText("TAP TO SHOW");
+                
+                }
+            
+                else {
+                    String strb = Integer.toString(bb);
+                    field1.setText(strb);
+                               
+                }
+            
+            }
         });
 
     }
