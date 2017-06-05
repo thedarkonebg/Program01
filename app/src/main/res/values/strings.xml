@@ -1,13 +1,5 @@
 <resources>
     <string name="app_name">Program01</string>
-    <string name="tap_description">TAP BUTTON TO SEE BPM</string>
-    <string name="change">% change</string>
-    <string name="bpm_tap">BPM TAP</string>
-    <string name="calculate">Calculate</string>
-    <string name="field1_description">Enter BPM of track 1</string>
-    <string name="field2_description">Enter BPM of track 2</string>
-    <string name="tap_hint">TAP BUTTON TO SEE BPM</string>
-    <string name="tap_button">TAP</string>
     <string name="pitch">PITCH</string>
     <string name="tap">BPM TAP</string>
     <string name="convert">CONVERT</string>
@@ -15,9 +7,10 @@
     <string name="enter_bpm_of_track_2">Enter BPM of track 2</string>
     <string name="reset">RESET</string>
     <string name="reset1">RESET</string>
-    <string name="tap_button_to_see_bpm">TAP BUTTON TO SEE BPM</string>
     <string name="tap_button_to_see_bpm1">TAP BUTTON TO SEE BPM</string>
     <string name="bpm_conversion_in">BPM CONVERSION IN %</string>
     <string name="taptap">TAP</string>
     <string name="pitch1">PITCH</string>
+
+    <string name="title_activity_fullscreen">splash</string>
 </resources>

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:background="#000000"
-    tools:context="com.altermovement.www.program01.Program01"
-    android:layout_height="match_parent">
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:tools="http://schemas.android.com/tools"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="match_parent"
+                                             android:background="#000000"
+                                             tools:context="com.altermovement.www.program01.Program01">
 
     <ScrollView
         style="@android:style/Widget.Holo.Light.ScrollView"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp">
@@ -20,9 +20,9 @@
             android:background="@drawable/bgbg"
             android:textAlignment="center"
             app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="@+id/parent"
+            app:layout_constraintRight_toRightOf="@+id/parent"
+            app:layout_constraintTop_toTopOf="@+id/parent"
             tools:layout_constraintLeft_creator="1"
             tools:layout_constraintRight_creator="1"
             tools:layout_constraintTop_creator="1">
@@ -43,7 +43,7 @@
                 android:shadowRadius="5"
                 android:text="@string/bpm_conversion_in"
                 android:textColor="#FFFFFF"
-                android:textSize="24sp" />
+                android:textSize="24sp"/>
 
             <EditText
                 android:id="@+id/field1"
@@ -61,16 +61,16 @@
                 android:gravity="center"
                 android:hint="@string/enter_bpm_of_track_1"
                 android:inputType="numberDecimal"
+                android:shadowColor="#000000"
+                android:shadowDx="3"
+                android:shadowDy="3"
+                android:shadowRadius="5"
                 android:textColor="#FFFFFF"
                 android:textColorHint="#999999"
                 android:textSize="30sp"
                 tools:ignore="RtlHardcoded"
                 tools:layout_editor_absoluteX="139dp"
-                android:shadowColor="#000000"
-                android:shadowDx="3"
-                android:shadowDy="3"
-                android:shadowRadius="5"
-                tools:layout_editor_absoluteY="16dp" />
+                tools:layout_editor_absoluteY="16dp"/>
 
             <EditText
                 android:id="@+id/field2"
@@ -83,16 +83,16 @@
                 android:gravity="center"
                 android:hint="@string/enter_bpm_of_track_2"
                 android:inputType="numberDecimal"
+                android:shadowColor="#000000"
+                android:shadowDx="3"
+                android:shadowDy="3"
+                android:shadowRadius="5"
                 android:textColor="#FFFFFF"
                 android:textColorHint="#999999"
                 android:textSize="30sp"
                 tools:ignore="RtlHardcoded"
                 tools:layout_editor_absoluteX="139dp"
-                android:shadowColor="#000000"
-                android:shadowDx="3"
-                android:shadowDy="3"
-                android:shadowRadius="5"
-                tools:layout_editor_absoluteY="83dp" />
+                tools:layout_editor_absoluteY="83dp"/>
 
             <Button
                 android:id="@+id/button"
@@ -114,7 +114,7 @@
                 android:textStyle="bold"
                 android:windowSoftInputMode="stateHidden"
                 app:layout_constraintRight_toLeftOf="@+id/change"
-                tools:layout_editor_absoluteY="146dp" />
+                tools:layout_editor_absoluteY="146dp"/>
 
             <Button
                 android:id="@+id/calc_reset"
@@ -137,7 +137,7 @@
                 android:windowSoftInputMode="stateHidden"
                 app:layout_constraintRight_toLeftOf="@+id/change"
                 tools:ignore="RtlHardcoded"
-                tools:layout_editor_absoluteY="146dp" />
+                tools:layout_editor_absoluteY="146dp"/>
 
             <TextView
                 android:id="@+id/change"
@@ -152,17 +152,13 @@
                 android:layout_marginTop="10dp"
                 android:background="#333333"
                 android:gravity="center"
-                android:shadowColor="#000000"
-                android:shadowDx="2"
-                android:shadowDy="2"
-                android:shadowRadius="2"
                 android:text="@string/pitch"
                 android:textColor="#FFFFFF"
                 android:textSize="45sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                tools:layout_editor_absoluteX="139dp" />
+                tools:layout_editor_absoluteX="139dp"/>
 
             <TextView
                 android:id="@+id/description2"
@@ -172,14 +168,14 @@
                 android:layout_marginTop="10dp"
                 android:background="#006999"
                 android:gravity="center"
-                android:text="@string/tap_button_to_see_bpm1"
-                android:textColor="#FFFFFF"
-                tools:layout_editor_absoluteX="139dp"
                 android:shadowColor="#000000"
                 android:shadowDx="3"
                 android:shadowDy="3"
                 android:shadowRadius="5"
-                android:textSize="24sp" />
+                android:text="@string/tap_button_to_see_bpm1"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp"
+                tools:layout_editor_absoluteX="139dp"/>
 
             <TextView
                 android:id="@+id/bpm_tap"
@@ -195,16 +191,16 @@
                 android:background="#333333"
                 android:gravity="center"
                 android:shadowColor="#000000"
-                android:shadowDx="2"
-                android:shadowDy="2"
-                android:shadowRadius="2"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:shadowRadius="1"
                 android:text="@string/tap"
                 android:textColor="#FFFFFF"
                 android:textSize="45sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                tools:layout_editor_absoluteX="139dp" />
+                tools:layout_editor_absoluteX="139dp"/>
 
             <Button
                 android:id="@+id/tap"
@@ -224,7 +220,7 @@
                 android:textStyle="bold"
                 android:windowSoftInputMode="stateHidden"
                 app:layout_constraintRight_toLeftOf="@+id/change"
-                tools:layout_editor_absoluteY="146dp" />
+                tools:layout_editor_absoluteY="146dp"/>
 
             <Button
                 android:id="@+id/sendbpm"
@@ -236,7 +232,7 @@
                 android:textColor="#006699"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                android:windowSoftInputMode="stateHidden" />
+                android:windowSoftInputMode="stateHidden"/>
 
             <Button
                 android:id="@+id/reset"
@@ -259,7 +255,7 @@
                 android:windowSoftInputMode="stateHidden"
                 app:layout_constraintRight_toLeftOf="@+id/change"
                 tools:ignore="RtlHardcoded"
-                tools:layout_editor_absoluteY="146dp" />
+                tools:layout_editor_absoluteY="146dp"/>
 
         </RelativeLayout>
     </ScrollView>
