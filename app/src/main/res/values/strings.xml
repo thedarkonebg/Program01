@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Program01</string>
+    <string name="app_name">One for all</string>
     <string name="pitch">PITCH</string>
     <string name="tap">BPM TAP</string>
     <string name="convert">CONVERT</string>
@@ -12,5 +12,8 @@
     <string name="taptap">TAP</string>
     <string name="pitch1">PITCH</string>
 
-    <string name="title_activity_fullscreen">splash</string>
+    <string name="title_activity_fullscreen">One4all</string>
+    <string name="showtap">TAP TO SHOW</string>
+    <string name="taptext">BPM TAP</string>
+    <string name="tapbut">BPM TAP</string>
 </resources>

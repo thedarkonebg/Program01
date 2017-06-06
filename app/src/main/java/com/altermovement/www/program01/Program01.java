@@ -15,7 +15,6 @@ import java.util.Arrays;
 
         
 public class Program01 extends AppCompatActivity {
-    
    
     @SuppressWarnings("ConstantConditions")
     public void hideSoftKeyboard() {
@@ -28,10 +27,7 @@ public class Program01 extends AppCompatActivity {
             inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
     }
-    
-    /**
-     * Shows the soft keyboard
-     */
+
     private TextView bpm_tap;       // TEXT FIELD TAP BPM
     
     // TAP BPM CALCULATION VARIABLES
@@ -49,11 +45,11 @@ public class Program01 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
      
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_program01);
+    super.onCreate(savedInstanceState);
+
+    setContentView(R.layout.activity_program01);
     
-    
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     
     
         // CONVERSION BUTTONS
@@ -160,7 +156,7 @@ public class Program01 extends AppCompatActivity {
                 mLastBeats = new long[8];
                 mCurrentBeat = 0;
                 mPreviousBeat = 0;
-                bpm_tap.setText("BPM TAP");
+                bpm_tap.setText(R.string.tapbut);
 
             }
 
@@ -238,7 +234,7 @@ public class Program01 extends AppCompatActivity {
             public void onClick(View v) {
                 hideSoftKeyboard();
             
-                if (bpm_tap.getText().equals("BPM TAP")) {
+                if (bpm_tap.getText().equals(getString(R.string.taptext))) {
                 
                     field1.setText("");
                 
@@ -246,7 +242,7 @@ public class Program01 extends AppCompatActivity {
             
                 else    if (bpm_tap.getText().length() == 0) {
                 
-                    field1.setText("TAP TO SHOW");
+                    field1.setText(R.string.showtap);
                 
                 }
             

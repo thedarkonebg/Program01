@@ -15,6 +15,11 @@ public class splashscreen extends Activity {
 	private static final String LOG_TAG = splashscreen.class.getSimpleName();
 
 	@Override
+	public void onBackPressed() {
+		// Do Here what ever you want do on back press;
+	}
+
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
@@ -39,28 +44,11 @@ public class splashscreen extends Activity {
 		logo.setScaleX(2);
 		logo.setScaleY(2);
 
-
 		final ImageView appname = (ImageView) findViewById(R.id.appname);
 		appname.setImageResource(R.drawable.logot);
 		appname.setAlpha(0f);
 		appname.setScaleX(2);
 		appname.setScaleY(2);
-
-
-		/**
-
-		final AlphaAnimation animation1 = new AlphaAnimation(0.0f, 1.0f);
-		animation1.setDuration(1000);
-		animation1.setRepeatCount(1);
-		animation1.reset();
-
-		final AlphaAnimation animation2 = new AlphaAnimation(1.0f, 0.0f);
-		animation1.setDuration(1000);
-		animation2.setRepeatCount(1);
-		animation2.reset();
-
-		**/
-
 
 		Runnable logofi = new Runnable() {
 
@@ -79,7 +67,6 @@ public class splashscreen extends Activity {
 
 
 		Runnable logofo = new Runnable() {
-
 
 			@Override
 			public void run() {
@@ -101,7 +88,6 @@ public class splashscreen extends Activity {
 						.scaleX(1)
 						.scaleY(1);
 			}
-
 		};
 
 		Runnable apptextfo = new Runnable() {
@@ -116,20 +102,15 @@ public class splashscreen extends Activity {
 				background.animate()
 						.alpha(0f)
 						.setDuration(500);
-
 			}
-
 		};
 
 		Runnable finishsplash = new Runnable() {
 			@Override
 			public void run() {
-
-				startActivity(new Intent(getApplicationContext(), Program01.class));
+				startActivity(new Intent(getApplicationContext(), mainmenu.class));
 				finish();
-
 			}
-
 		};
 
 		handler.postDelayed(logofi, 1000);
