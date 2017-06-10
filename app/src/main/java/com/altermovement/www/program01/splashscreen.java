@@ -109,7 +109,7 @@ public class splashscreen extends Activity {
 			@Override
 			public void run() {
 				startActivity(new Intent(getApplicationContext(), mainmenu.class));
-				finish();
+				splashscreen.this.finish();
 			}
 		};
 
@@ -119,5 +119,18 @@ public class splashscreen extends Activity {
 		handler.postDelayed(apptextfo, 6000);
 		handler.postDelayed(finishsplash, 7000);
 
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		this.finish();
+	}
+
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		this.finish();
 	}
 }

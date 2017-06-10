@@ -1,80 +1,122 @@
 package com.altermovement.www.program01;
 
-import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ImageButton;
+import android.widget.Button;
 
 
-public class mainmenu extends Activity{
+public class mainmenu extends AppCompatActivity{
 	@Override
 
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
-
-		setContentView(R.layout.activity_mainmenu);
+		overridePendingTransition(R.anim.anim_fadein, R.anim.anim_fadeout);
+		setContentView(R.layout.activity_main);
 
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-		final ImageButton but1 = (ImageButton) findViewById(R.id.but1);
-		final ImageButton but2 = (ImageButton) findViewById(R.id.but2);
-		final ImageButton but3 = (ImageButton) findViewById(R.id.but3);
-		final ImageButton but4 = (ImageButton) findViewById(R.id.but4);
-		final ImageButton but5 = (ImageButton) findViewById(R.id.but5);
-		final ImageButton but6 = (ImageButton) findViewById(R.id.but6);
+		final Button but11 = (Button) findViewById(R.id.but1);
+		final Button but22 = (Button) findViewById(R.id.but2);
+		final Button but33 = (Button) findViewById(R.id.but3);
+		final Button but44 = (Button) findViewById(R.id.but4);
+		final Button but55 = (Button) findViewById(R.id.but5);
+		final Button but66 = (Button) findViewById(R.id.but6);
 
-		but1.setOnClickListener(new View.OnClickListener() {
+		but11.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 
-				startActivity(new Intent(getApplicationContext(), Program01.class));
+				//TODO
 
 			}
 		});
 
-		but2.setOnClickListener(new View.OnClickListener() {
+		but22.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				//dasdsadasdsad
+
+				startActivity(new Intent(getApplicationContext(), converter.class));
+
 			}
 		});
 
-		but3.setOnClickListener(new View.OnClickListener() {
+		but33.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				//dasdsadasdsad
+				Intent ob = new Intent(mainmenu.this, midicontroller.class);
+				startActivity(ob);
 			}
 		});
 
-		but4.setOnClickListener(new View.OnClickListener() {
+		but44.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				//dasdsadasdsad
+
+				//TODO
+
 			}
 		});
 
-		but5.setOnClickListener(new View.OnClickListener() {
+		but55.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				//dasdsadasdsad
+
+				//TODO
+
 			}
 		});
 
-		but6.setOnClickListener(new View.OnClickListener() {
+		but66.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				//dasdsadasdsad
+				new AlertDialog.Builder(mainmenu.this).setIcon(android.R.drawable.ic_dialog_alert).setTitle("Exit")
+						.setMessage("Are you sure you want to exit?")
+						.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								mainmenu.this.finish();
+							}
+						}).setNegativeButton("No", null).show();
 			}
 		});
 
+	}
+
+	@Override
+	public void onBackPressed() {
+		new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_dialog_alert).setTitle("Exit")
+				.setMessage("Are you sure you want to exit?")
+				.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						mainmenu.this.finish();
+					}
+				}).setNegativeButton("No", null).show();
+	}
+
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		this.finish();
+	}
+
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		this.finish();
 	}
 }

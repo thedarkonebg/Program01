@@ -1,8 +1,11 @@
 package com.altermovement.www.program01;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -14,22 +17,21 @@ import android.widget.TextView;
 import java.util.Arrays;
 
         
-public class Program01 extends AppCompatActivity {
-   
+public class converter extends AppCompatActivity {
+
     @SuppressWarnings("ConstantConditions")
     public void hideSoftKeyboard() {
-        if(getCurrentFocus() !=null) {
+        if (getCurrentFocus() != null) {
             InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-        }
-        else {
+        } else {
             InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
     }
 
     private TextView bpm_tap;       // TEXT FIELD TAP BPM
-    
+
     // TAP BPM CALCULATION VARIABLES
 
     private static final int MAX_WAIT = 2000;
@@ -41,33 +43,35 @@ public class Program01 extends AppCompatActivity {
     private int mCurrentBeat;
     private int bb;
     // TAP BPM CALCULATION VARIABLES
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-     
-    super.onCreate(savedInstanceState);
 
-    setContentView(R.layout.activity_program01);
-    
-    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-    
-    
+        super.onCreate(savedInstanceState);
+
+        overridePendingTransition(R.anim.anim_fadein, R.anim.anim_fadeout);
+
+        setContentView(R.layout.activity_program01);
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
+
         // CONVERSION BUTTONS
 
-    final Button button = (Button) findViewById(R.id.button);
-    final Button calc_reset = (Button) findViewById(R.id.calc_reset);
+        final Button button = (Button) findViewById(R.id.button);
+        final Button calc_reset = (Button) findViewById(R.id.calc_reset);
 
 
-    // CONVERSION TEXT INPUT OUTPUT FIELDS
+        // CONVERSION TEXT INPUT OUTPUT FIELDS
 
-    final EditText field1 = (EditText) findViewById(R.id.field1);
-    final EditText field2 = (EditText) findViewById(R.id.field2);
-    final TextView change = (TextView) findViewById(R.id.change);
+        final EditText field1 = (EditText) findViewById(R.id.field1);
+        final EditText field2 = (EditText) findViewById(R.id.field2);
+        final TextView change = (TextView) findViewById(R.id.change);
 
         // RESET BUTTON
 
         calc_reset.setOnClickListener(new View.OnClickListener() {
-            
+
             @Override
             public void onClick(View v) {
 
@@ -76,14 +80,14 @@ public class Program01 extends AppCompatActivity {
                 field2.setText("");
                 change.setText(R.string.pitch1);
                 change.setTextColor(Color.WHITE);
-                
+
             }
 
         });
 
-    // CONVERSION BUTTON
+        // CONVERSION BUTTON
 
-        button.setOnClickListener(new View.OnClickListener(){
+        button.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -91,13 +95,13 @@ public class Program01 extends AppCompatActivity {
                 // CHECK FOR EMPTY FIELDS
                 // RETURNS ERROR IF FOUND
                 hideSoftKeyboard();
-                if ( (field1.getText().length()==0) || (field2.getText().length()==0) ) {
+                if ((field1.getText().length() == 0) || (field2.getText().length() == 0)) {
 
                     String error = "INVALID BPM !!!";
                     change.setText(error);
                     change.setTextColor(Color.RED);
 
-                }   else {
+                } else {
 
                     double bpm1;
                     double bpm2;
@@ -106,22 +110,18 @@ public class Program01 extends AppCompatActivity {
                     bpm1 = Double.parseDouble(field1.getText().toString());
                     bpm2 = Double.parseDouble(field2.getText().toString());
 
-                    if ( bpm2 / bpm1 <= 0.5 ) {
+                    if (bpm2 / bpm1 <= 0.5) {
 
                         String error1 = "TOO LOW !!!";
                         change.setText(error1);
                         change.setTextColor(Color.RED);
 
-                    }
-
-                    else if (bpm2 / bpm1 >= 2) {
+                    } else if (bpm2 / bpm1 >= 2) {
                         String error1 = "TOO HIGH !!!";
                         change.setText(error1);
                         change.setTextColor(Color.RED);
 
-                    }
-
-                    else{
+                    } else {
 
                         bpmc = ((bpm2 / bpm1) - 1) * 100;
 
@@ -163,13 +163,13 @@ public class Program01 extends AppCompatActivity {
         });
 
         // TAP BPM BUTTON FUNCTION
-        
+
         findViewById(R.id.tap).setOnTouchListener(new View.OnTouchListener() {
             @Override
-            
+
             public boolean onTouch(View v, MotionEvent event) {
                 hideSoftKeyboard();
-                
+
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     if (mPreviousBeat > 0) {
                         long beat = System.currentTimeMillis();
@@ -178,9 +178,7 @@ public class Program01 extends AppCompatActivity {
                         // reset
                         if (diff >= MAX_WAIT) {
                             Arrays.fill(mLastBeats, 0);
-                        }
-
-                        else {
+                        } else {
                             mLastBeats[mCurrentBeat] = diff;
                             mCurrentBeat++;
                             if (mCurrentBeat >= mLastBeats.length)
@@ -199,7 +197,7 @@ public class Program01 extends AppCompatActivity {
                     }
 
                     mPreviousBeat = System.currentTimeMillis();
-                    
+
                     return true;
                 }
 
@@ -223,38 +221,65 @@ public class Program01 extends AppCompatActivity {
             }
 
         });
-    
+
         // SEND TAP BPM TO BPM 1 BUTTON
-    
+
         final Button sendbpm = (Button) findViewById(R.id.sendbpm);
-    
+
         sendbpm.setOnClickListener(new View.OnClickListener() {
-        
+
             @Override
             public void onClick(View v) {
                 hideSoftKeyboard();
-            
+
                 if (bpm_tap.getText().equals(getString(R.string.taptext))) {
-                
+
                     field1.setText("");
-                
-                }
-            
-                else    if (bpm_tap.getText().length() == 0) {
-                
+
+                } else if (bpm_tap.getText().length() == 0) {
+
                     field1.setText(R.string.showtap);
-                
-                }
-            
-                else {
+
+                } else {
                     String strb = Integer.toString(bb);
                     field1.setText(strb);
-                               
-                }
-            
-            }
-        });
 
+                }
+
+            }
+
+        });
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (Integer.parseInt(android.os.Build.VERSION.SDK) < 5
+                && keyCode == KeyEvent.KEYCODE_BACK
+                && event.getRepeatCount() == 0) {
+            Log.d("CDA", "onKeyDown Called");
+            onBackPressed();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    public void onBackPressed() {
+        Log.d("CDA", "onBackPressed Called");
+        Intent ob = new Intent(converter.this, mainmenu.class);
+        startActivity(ob);
+        converter.this.finish();
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        this.finish();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        this.finish();
     }
 
 }
