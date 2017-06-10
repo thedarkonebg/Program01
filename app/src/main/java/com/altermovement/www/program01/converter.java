@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -49,11 +48,12 @@ public class converter extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
 
+
+
         overridePendingTransition(R.anim.anim_fadein, R.anim.anim_fadeout);
 
         setContentView(R.layout.activity_program01);
 
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
 
         // CONVERSION BUTTONS
