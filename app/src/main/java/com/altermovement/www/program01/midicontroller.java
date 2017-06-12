@@ -1,22 +1,30 @@
 package com.altermovement.www.program01;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 
-public class midicontroller extends AppCompatActivity {
+
+public class midicontroller extends Activity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         overridePendingTransition(R.anim.anim_fadein, R.anim.anim_fadeout);
+
         setContentView(R.layout.activity_midicontroller);
 
         final Button but1 = (Button) findViewById(R.id.but1);
@@ -30,8 +38,8 @@ public class midicontroller extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-
-
+                    Intent midi = new Intent(midicontroller.this, midi_settings.class);
+                    startActivity(midi);
             }
         });
 

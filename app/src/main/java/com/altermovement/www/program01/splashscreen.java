@@ -29,14 +29,14 @@ public class splashscreen extends Activity {
 
 		setContentView(splash);
 
-		Handler handler = new Handler();
+        final ImageView background = (ImageView) findViewById(R.id.background);
+        background.setImageResource(R.drawable.bg);
+        background.setAlpha(0f);
+        background.animate()
+                .alpha(1f)
+                .setDuration(500);
 
-		final ImageView background = (ImageView) findViewById(R.id.background);
-		background.setImageResource(R.drawable.bg);
-		background.setAlpha(0f);
-		background.animate()
-				.alpha(1f)
-				.setDuration(500);
+		Handler handler = new Handler();
 
 		final ImageView logo = (ImageView) findViewById(R.id.logo);
 		logo.setImageResource(R.drawable.alterlogo);
@@ -118,7 +118,6 @@ public class splashscreen extends Activity {
 		handler.postDelayed(apptextfi, 4000);
 		handler.postDelayed(apptextfo, 6000);
 		handler.postDelayed(finishsplash, 7000);
-
 	}
 
 	@Override
