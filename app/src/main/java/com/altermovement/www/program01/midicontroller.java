@@ -31,7 +31,7 @@ public class midicontroller extends Activity{
         final Button but2 = (Button) findViewById(R.id.cont1_button);
         final Button but3 = (Button) findViewById(R.id.but3);
         final Button but4 = (Button) findViewById(R.id.but4);
-        final Button but5 = (Button) findViewById(R.id.but5);
+        final Button but5 = (Button) findViewById(R.id.signal);
         final Button but6 = (Button) findViewById(R.id.exit_button);
 
         but1.setOnClickListener(new View.OnClickListener() {

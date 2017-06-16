@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE"/>
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS">
+    </uses-permission>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/icon"
@@ -41,7 +43,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".midi_settings">
+        <activity android:name=".signalgen">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

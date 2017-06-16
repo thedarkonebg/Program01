@@ -33,7 +33,7 @@ public class mainmenu extends AppCompatActivity{
 		final Button but22 = (Button) findViewById(R.id.but2);
 		final Button but33 = (Button) findViewById(R.id.but3);
 		final Button but44 = (Button) findViewById(R.id.but4);
-		final Button but55 = (Button) findViewById(R.id.but5);
+		final Button but55 = (Button) findViewById(R.id.signal);
 		final Button but66 = (Button) findViewById(R.id.but6);
 
 		but11.setOnClickListener(new View.OnClickListener() {
@@ -80,7 +80,9 @@ public class mainmenu extends AppCompatActivity{
 			@Override
 			public void onClick(View v) {
 
-				//TODO
+				Intent ob = new Intent(mainmenu.this, signalgen.class);
+				startActivity(ob);
+				finish();
 
 			}
 		});

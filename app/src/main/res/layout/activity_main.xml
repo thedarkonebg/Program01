@@ -85,7 +85,7 @@
                     android:textColor="@android:color/white"
                     android:textSize="20sp"
                     android:textStyle="bold"
-                    app:layout_constraintTop_toBottomOf="@+id/but5"
+                    app:layout_constraintTop_toBottomOf="@+id/signal"
                     tools:layout_editor_absoluteX="8dp" />
 
                 <Button
@@ -131,13 +131,13 @@
                     tools:layout_editor_absoluteX="8dp" />
 
                 <Button
-                    android:id="@+id/but5"
+                    android:id="@+id/signal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="2dp"
                     android:background="@color/black_overlay"
                     android:padding="10dp"
-                    android:text="AUDIO ANALYZER"
+                    android:text="SIGNAL GENERATOR"
                     android:textColor="@android:color/white"
                     android:textSize="20sp"
                     android:textStyle="bold"
