@@ -20,9 +20,11 @@ public class Waveform implements Runnable{
     public int amplitude;
 
     public Waveform(){
+
         frequency = 100;
         mode = 2;
         amplitude = 32767;
+
     }
 
     public synchronized void setWave() {
@@ -32,6 +34,7 @@ public class Waveform implements Runnable{
 
         int sizes[] = {1024, 2048, 4096, 8192, 16384, 32768};
         int size = 0;
+
         for (int s : sizes)
         {
             if (s > minSize)
@@ -53,37 +56,41 @@ public class Waveform implements Runnable{
 
         myWave.play();
 
-        int sampleCount = (int) ((double) rate / frequency);
-        short samples[] = new short[sampleCount];
+        short samples[] = new short[size];
         double doublepi = 8. * Math.atan(1.0);
         double phase = 0.0;
 
         while (thread != null) {
-            switch (mode) {
 
-                case 1: // SQUARE WAVE
+            for (int i = 0; i < samples.length; i++) {
 
-                    for (int i = 0; i < samples.length; i++) {
+                if (phase < Math.PI) {
+                    phase += doublepi * frequency / rate;
+                }
+                else {
+                    phase += (doublepi * frequency / rate) - (2 * Math.PI);
+                }
+
+                switch (mode) {
+
+                    case 1: // SQUARE WAVE
+
                         samples[i] = (short) Math.round(amplitude * Math.signum(Math.sin(phase)));
-                        phase += doublepi * frequency / rate;
-                    }
-                    break;
+                        break;
 
-                case 2: // SINE WAVE
-                    for (int i = 0; i < samples.length; i++) {
+                    case 2: // SINE WAVE
+
                         samples[i] = (short) Math.round(amplitude * Math.sin(phase));
-                        phase += doublepi * frequency / rate;
-                    }
-                    break;
+                        break;
 
-                case 3: // TRIANGLE WAVE
-                    for (int i = 0; i < samples.length; i++) {
-                        samples[i] = (short) Math.round(amplitude * (Math.floor(phase) - phase + 0.5));
-                        phase += doublepi * frequency / rate;
-                    }
-                    break;
+                    case 3: // TRIANGLE WAVE
+
+                        samples[i] = (short) Math.round(amplitude * Math.round((phase) / Math.PI));
+                        break;
+                }
             }
 
+            myWave.setPlaybackHeadPosition(100);
             myWave.write(samples, 0, samples.length);
         }
 

@@ -6,7 +6,7 @@
     style="@style/Theme.AppCompat.NoActionBar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg"
+    android:background="@android:color/black"
     android:foregroundGravity="center"
     android:keepScreenOn="true"
     android:orientation="vertical"
@@ -19,11 +19,7 @@
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
+        android:background="@drawable/bg"
         android:foregroundGravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -33,38 +29,23 @@
         app:layout_constraintVertical_bias="1.0">
 
         <android.support.constraint.ConstraintLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:foregroundGravity="center"
-            android:paddingBottom="10dp">
+            android:foregroundGravity="center">
 
-            <FrameLayout
-                android:id="@+id/frameLayout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="20dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginStart="20dp"
-                android:foregroundGravity="fill"
-                android:paddingBottom="10dp"
-                android:paddingTop="20dp"
-                android:visibility="visible"
-                app:layout_constraintHorizontal_bias="0.0"
+            <ImageView
+                android:id="@+id/midilogo"
+                android:layout_width="196dp"
+                android:layout_height="107dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                android:scaleType="fitEnd"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageView
-                    android:id="@+id/midilogo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="160dp"
-                    android:adjustViewBounds="false"
-                    android:scaleType="fitCenter"
-                    app:srcCompat="@drawable/midilogo" />
-
-            </FrameLayout>
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/midilogo" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -75,7 +56,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/frameLayout">
+                app:layout_constraintTop_toBottomOf="@+id/midilogo">
 
                 <Button
                     android:id="@+id/but1"

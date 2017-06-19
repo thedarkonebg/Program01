@@ -71,7 +71,7 @@ public class signalgen extends Activity implements View.OnClickListener {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     getApplicationContext();
-
+                    frequency = Integer.parseInt(wavefrequency.getText().toString());
                     if (frequency < 10){
                         wavefrequency.setText("20");
                         wave.frequency = frequency;
@@ -83,8 +83,7 @@ public class signalgen extends Activity implements View.OnClickListener {
                         wave.mode = w;
                         Toast.makeText(getApplicationContext(), "FREQUENCY TOO LOW", Toast.LENGTH_LONG).show();
                     } else {
-                        frequency = Integer.parseInt(wavefrequency.getText().toString());
-                        wave.frequency = frequency;
+                        wave.frequency = Integer.parseInt(wavefrequency.getText().toString());
                         InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         in.hideSoftInputFromWindow(wavefrequency.getApplicationWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
                         //wave.mode = w;
@@ -141,6 +140,7 @@ public class signalgen extends Activity implements View.OnClickListener {
         });
 
         toggle.setOnClickListener(this);
+        toggle.setSoundEffectsEnabled(false);
         volumeseek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
@@ -195,6 +195,20 @@ public class signalgen extends Activity implements View.OnClickListener {
             wave.stop();
         }
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (wave != null)
+            wave.stop();
+    }
+
+    // On Resume
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
     }
 }
 
