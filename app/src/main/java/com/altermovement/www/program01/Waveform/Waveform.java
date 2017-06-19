@@ -1,85 +1,122 @@
 package com.altermovement.www.program01.Waveform;
 
+import android.graphics.Color;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
-import android.util.Log;
+
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.LineData;
 
 /**
  * Created by The Dark One on 15.6.2017 г..
  */
 
-public class Waveform extends Thread{
+public class Waveform implements Runnable{
 
-    private static String TAG = "tag";
-    private final int SAMPLE_RATE = 44100;
-    private AudioTrack myWave;
-    private int sampleCount;
+    private Thread thread;
+    public int frequency;
+    public int mode;
+    public int amplitude;
 
     public Waveform(){
-        int buffersize = AudioTrack.getMinBufferSize(SAMPLE_RATE, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT);
-        myWave = new AudioTrack(AudioManager.STREAM_MUSIC, SAMPLE_RATE, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT, buffersize, AudioTrack.MODE_STATIC, AudioTrack.STATE_INITIALIZED);
-        String aaa = String.valueOf(myWave.getState());
-        Log.d(TAG, aaa);
+        frequency = 100;
+        mode = 2;
+        amplitude = 32767;
     }
 
-    public void setWave(int frequency, int mode) {
+    public synchronized void setWave() {
 
-        sampleCount = (int) ((double) SAMPLE_RATE / frequency);
-        short samples[] = new short[sampleCount];
-        int amplitude = 32767;
-        double doublepi = 8. * Math.atan(1.);
-        double phase = 0.0;
+        int rate = AudioTrack.getNativeOutputSampleRate(AudioManager.STREAM_MUSIC);
+        int minSize = AudioTrack.getMinBufferSize(rate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT);
 
-        switch (mode) {
-
-            case 1: // SQUARE WAVE
-
-                for (int i = 0; i < sampleCount; i++) {
-                    samples[i] = (short) (amplitude * Math.signum(Math.sin(phase)));
-                    phase += doublepi * frequency / SAMPLE_RATE;
-                }
+        int sizes[] = {1024, 2048, 4096, 8192, 16384, 32768};
+        int size = 0;
+        for (int s : sizes)
+        {
+            if (s > minSize)
+            {
+                size = s;
                 break;
-
-            case 2: // SINE WAVE
-                for (int i = 0; i < sampleCount; i++) {
-                    samples[i] = (short) (amplitude * Math.sin(phase));
-                    phase += doublepi * frequency / SAMPLE_RATE;
-                }
-                break;
-
-            case 3: // TRIANGLE WAVE
-                for (int i = 0; i < sampleCount; i++) {
-                    samples[i] = (short) (amplitude * (Math.floor(phase) - phase + 0.5));
-                    phase += doublepi * frequency / SAMPLE_RATE;
-                }
-                break;
+            }
         }
 
-        myWave.write(samples, 0, sampleCount);
-        String samp = String.valueOf(samples[5]);
-        Log.d(TAG, samp);
+        AudioTrack myWave = new AudioTrack(AudioManager.STREAM_MUSIC, rate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT, size, AudioTrack.MODE_STREAM);
+
+        int state = myWave.getState();
+
+        if (state != AudioTrack.STATE_INITIALIZED)
+        {
+            myWave.release();
+            return;
+        }
+
+        myWave.play();
+
+        int sampleCount = (int) ((double) rate / frequency);
+        short samples[] = new short[sampleCount];
+        double doublepi = 8. * Math.atan(1.0);
+        double phase = 0.0;
+
+        while (thread != null) {
+            switch (mode) {
+
+                case 1: // SQUARE WAVE
+
+                    for (int i = 0; i < samples.length; i++) {
+                        samples[i] = (short) Math.round(amplitude * Math.signum(Math.sin(phase)));
+                        phase += doublepi * frequency / rate;
+                    }
+                    break;
+
+                case 2: // SINE WAVE
+                    for (int i = 0; i < samples.length; i++) {
+                        samples[i] = (short) Math.round(amplitude * Math.sin(phase));
+                        phase += doublepi * frequency / rate;
+                    }
+                    break;
+
+                case 3: // TRIANGLE WAVE
+                    for (int i = 0; i < samples.length; i++) {
+                        samples[i] = (short) Math.round(amplitude * (Math.floor(phase) - phase + 0.5));
+                        phase += doublepi * frequency / rate;
+                    }
+                    break;
+            }
+
+            myWave.write(samples, 0, samples.length);
+        }
+
+        myWave.stop();
+        myWave.release();
     }
 
     public void start() {
-        myWave.reloadStaticData();
-        myWave.setLoopPoints(0, sampleCount, -1);
-        myWave.play();
+
+        thread = new Thread(this, "myWave");
+        thread.start();
     }
 
+    public void stop() {
 
-    public void stp() {
-        myWave.stop();
+        Thread t = thread;
+        thread = null;
+
+        // Wait for the thread to exit
+        while (t != null && t.isAlive())
+            Thread.yield();
     }
 
-    public void pause() {
-        myWave.pause();
-        myWave.reloadStaticData();
+    public void dataset(LineChart wavechart, int w) {
+
+        LineData data = wavechart.getData();
+        wavechart.setBackgroundColor(Color.LTGRAY);
     }
 
-//    public void reload() {
-//        myWave.reloadStaticData();
-//    }
-
+    @Override
+    public void run()
+    {
+        setWave();
+    }
 }
 

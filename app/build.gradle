@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'key0'
+            keyPassword '666grama'
+            storeFile file('C:/Users/The Dark One/key.jks')
+            storePassword '666grama'
+        }
+    }
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
     defaultConfig {
@@ -9,6 +17,7 @@ android {
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
+        signingConfig signingConfigs.config
     }
     repositories {
         maven {
@@ -19,6 +28,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
     productFlavors {
@@ -28,6 +38,7 @@ android {
             targetSdkVersion 25
             versionCode 1
             versionName '1.0'
+            signingConfig signingConfigs.config
         }
     }
 }
@@ -39,5 +50,5 @@ dependencies {
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.android.support:preference-v7:25.3.1'
-    compile "com.androidplot:androidplot-core:1.4.3"
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
 }

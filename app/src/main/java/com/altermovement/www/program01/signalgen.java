@@ -1,34 +1,41 @@
 package com.altermovement.www.program01;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.altermovement.www.program01.Waveform.Waveform;
-
-import java.util.logging.Logger;
+import com.github.mikephil.charting.charts.LineChart;
 
 
 public class signalgen extends Activity implements View.OnClickListener {
 
-    private int w = 2;
-    private int freq = 100;
-    private final static Logger LOGGER = Logger.getLogger(signalgen.class.getName());
-    int modul;
+    private int w;
+    private static int FACTOR_VOL = 327;
+    private int frequency;
+    private int amp;
+    private int mod;
 
-    Waveform wave = new Waveform();
+    Waveform wave;
     EditText wavefrequency;
     SeekBar modulate;
+    SeekBar volumeseek;
     ToggleButton toggle;
     RadioGroup radio;
+    LineChart wavechart;
+
 
     @SuppressWarnings("ConstantConditions")
     public void hideSoftKeyboard() {
@@ -52,32 +59,80 @@ public class signalgen extends Activity implements View.OnClickListener {
 
         overridePendingTransition(R.anim.anim_fadein, R.anim.anim_fadeout);
         setContentView(R.layout.signalgen);
-
         initializeView();
-    }
 
-    private void initializeView() {
+        frequency = Integer.parseInt(wavefrequency.getText().toString());
+        w = 2;
+        amp = (volumeseek.getProgress() * FACTOR_VOL) + 1;
+        mod = 100;
 
-        wavefrequency = (EditText) findViewById(R.id.freq);
-        modulate = (SeekBar) findViewById(R.id.modulate);
+        wavefrequency.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    getApplicationContext();
 
-        radio = (RadioGroup) findViewById(R.id.Group);
+                    if (frequency < 10){
+                        wavefrequency.setText("20");
+                        wave.frequency = frequency;
+                        wave.mode = w;
+                        Toast.makeText(getApplicationContext(), "FREQUENCY TOO LOW", Toast.LENGTH_LONG).show();
+                    } else if (frequency > 20000){
+                        wavefrequency.setText("20000");
+                        wave.frequency = frequency;
+                        wave.mode = w;
+                        Toast.makeText(getApplicationContext(), "FREQUENCY TOO LOW", Toast.LENGTH_LONG).show();
+                    } else {
+                        frequency = Integer.parseInt(wavefrequency.getText().toString());
+                        wave.frequency = frequency;
+                        InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        in.hideSoftInputFromWindow(wavefrequency.getApplicationWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+                        //wave.mode = w;
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+
+
+
+        modulate.setOnClickListener(this);
+        modulate.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            int mod = 100;
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
+                mod = progresValue;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                mod= modulate.getProgress();
+            }
+        });
+
         radio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            int frequency = Integer.parseInt(wavefrequency.getText().toString());
+
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
 
                 if (checkedId == R.id.rsquare) {
                     w = 1;
-                    wave.setWave(frequency, w);
+                    wave.mode = 1;
                     Toast.makeText(getApplicationContext(), "Square wave", Toast.LENGTH_SHORT).show();
                 } else if (checkedId == R.id.rsine) {
                     w = 2;
-                    wave.setWave(frequency, w);
+                    wave.mode = 2;
                     Toast.makeText(getApplicationContext(), "Sine wave", Toast.LENGTH_SHORT).show();
                 } else {
                     w = 3;
-                    wave.setWave(frequency, w);
+                    wave.mode = 3;
                     Toast.makeText(getApplicationContext(), "Sawtooth wave", Toast.LENGTH_SHORT).show();
                 }
 
@@ -85,24 +140,59 @@ public class signalgen extends Activity implements View.OnClickListener {
 
         });
 
-        toggle = (ToggleButton) findViewById(R.id.toggle);
         toggle.setOnClickListener(this);
+        volumeseek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
+                wave.amplitude = (volumeseek.getProgress() * FACTOR_VOL) + 1;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // FACTOR value / 100 = x / 32767 (x = amplitude)
+                wave.amplitude = (volumeseek.getProgress() * FACTOR_VOL) + 1;
+            }
+        });
+
+        wave = new Waveform();
+        wave.frequency = frequency;
+        wave.mode = w;
+        wave.amplitude = amp;
+        wave.stop();
+    }
+
+    private void initializeView() {
+
+        wavechart = (LineChart) findViewById(R.id.wavechart);
+        wavefrequency = (EditText) findViewById(R.id.freq);
+        modulate = (SeekBar) findViewById(R.id.modulate);
+        radio = (RadioGroup) findViewById(R.id.Group);
+        volumeseek = (SeekBar) findViewById(R.id.volseek);
+        toggle = (ToggleButton) findViewById(R.id.toggle);
+
     }
 
     @Override
     public void onClick(View v) {
 
-        modul = 0;
-        int frequency = Integer.parseInt(wavefrequency.getText().toString());
-        wave.setWave(frequency, w);
+        mod = 0;
+        amp = (volumeseek.getProgress() * FACTOR_VOL);
+        frequency = Integer.parseInt(wavefrequency.getText().toString());
         boolean on = toggle.isChecked();
-
         if (on) {
-            wave.start();
-            wave.pause();
-            wave.start();
+            wave.frequency = frequency;
+            wave.amplitude = amp;
+            wave.mode = w;
+            if (wave != null)
+                wave.start();
         } else {
-            wave.stp();
+            wave.stop();
         }
 
     }
