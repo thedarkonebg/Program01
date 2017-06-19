@@ -266,7 +266,7 @@
                 android:id="@+id/exit"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/bpm_tap"
+                android:layout_below="@+id/sendbpm"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
@@ -274,7 +274,7 @@
                 android:textColor="#006699"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                android:windowSoftInputMode="stateHidden"/>
+                android:windowSoftInputMode="stateHidden" />
 
         </RelativeLayout>
     </ScrollView>
