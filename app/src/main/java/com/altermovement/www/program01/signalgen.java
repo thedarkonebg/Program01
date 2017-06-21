@@ -2,7 +2,9 @@ package com.altermovement.www.program01;
 
 import android.app.Activity;
 import android.content.Context;
+import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -17,7 +19,6 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.altermovement.www.program01.Waveform.Waveform;
-import com.github.mikephil.charting.charts.LineChart;
 
 
 public class signalgen extends Activity implements View.OnClickListener {
@@ -27,6 +28,7 @@ public class signalgen extends Activity implements View.OnClickListener {
     private int frequency;
     private int amp;
     private int mod;
+    Handler handler;
 
     Waveform wave;
     EditText wavefrequency;
@@ -34,19 +36,8 @@ public class signalgen extends Activity implements View.OnClickListener {
     SeekBar volumeseek;
     ToggleButton toggle;
     RadioGroup radio;
-    LineChart wavechart;
 
-
-    @SuppressWarnings("ConstantConditions")
-    public void hideSoftKeyboard() {
-        if (getCurrentFocus() != null) {
-            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-        } else {
-            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-        }
-    }
+    public static AudioManager audioManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +56,7 @@ public class signalgen extends Activity implements View.OnClickListener {
         w = 2;
         amp = (volumeseek.getProgress() * FACTOR_VOL) + 1;
         mod = 100;
+
 
         wavefrequency.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -102,7 +94,7 @@ public class signalgen extends Activity implements View.OnClickListener {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
-                mod = progresValue;
+                wave.mod = modulate.getProgress() * 10;
             }
 
             @Override
@@ -112,7 +104,7 @@ public class signalgen extends Activity implements View.OnClickListener {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                mod= modulate.getProgress();
+                wave.mod = modulate.getProgress() * 10;
             }
         });
 
@@ -140,7 +132,7 @@ public class signalgen extends Activity implements View.OnClickListener {
         });
 
         toggle.setOnClickListener(this);
-        toggle.setSoundEffectsEnabled(false);
+        volumeseek.setProgress(100);
         volumeseek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
@@ -160,41 +152,37 @@ public class signalgen extends Activity implements View.OnClickListener {
             }
         });
 
-        wave = new Waveform();
-        wave.frequency = frequency;
-        wave.mode = w;
-        wave.amplitude = amp;
-        wave.stop();
+        //wave.stop();
     }
 
     private void initializeView() {
 
-        wavechart = (LineChart) findViewById(R.id.wavechart);
+        audioManager=(AudioManager) getSystemService(Context.AUDIO_SERVICE);
         wavefrequency = (EditText) findViewById(R.id.freq);
         modulate = (SeekBar) findViewById(R.id.modulate);
         radio = (RadioGroup) findViewById(R.id.Group);
         volumeseek = (SeekBar) findViewById(R.id.volseek);
         toggle = (ToggleButton) findViewById(R.id.toggle);
+        wave = new Waveform();
 
     }
+
 
     @Override
     public void onClick(View v) {
 
         mod = 0;
-        amp = (volumeseek.getProgress() * FACTOR_VOL);
         frequency = Integer.parseInt(wavefrequency.getText().toString());
         boolean on = toggle.isChecked();
         if (on) {
-            wave.frequency = frequency;
-            wave.amplitude = amp;
-            wave.mode = w;
             if (wave != null)
-                wave.start();
-        } else {
-            wave.stop();
+//                wave.start();
+                fadein();
         }
 
+        if (!on) {
+                fadeout();
+        }
     }
 
     @Override
@@ -209,6 +197,48 @@ public class signalgen extends Activity implements View.OnClickListener {
     protected void onResume()
     {
         super.onResume();
+    }
+
+    public void fadeout(){
+        int targetVol = 0;
+        int STEP_DOWN=2;
+        int currentVol = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        int nextVol=currentVol;
+        // fade music gently
+        while(currentVol > targetVol) {
+            try {
+                Thread.sleep(25);
+            }catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, currentVol - STEP_DOWN,0);
+            currentVol = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        }
+        wave.stop();
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, nextVol, 0);
+    }
+
+    public void fadein(){
+        int initialVol = 0;
+        int STEP_UP=2;
+        int currentVol = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, 0);
+        wave.start();
+        wave.frequency = frequency;
+        wave.mode = w;
+        wave.amplitude = amp;
+
+        while(initialVol < currentVol) {
+            try {
+                Thread.sleep(25);
+            }catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, initialVol + STEP_UP,0);
+            initialVol = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        }
     }
 }
 
