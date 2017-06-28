@@ -2,8 +2,10 @@ package com.altermovement.www.program01;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -59,7 +61,7 @@ public class signalgen extends Activity implements View.OnClickListener {
         w = 2;
         amp = (volumeseek.getProgress() * FACTOR_VOL) + 1;
 
-        graphview = findViewById(R.id.graph);
+        graphview = (GraphView) findViewById(R.id.graph);
 
         wavefrequency.setOnEditorActionListener(new DoneOnEditorActionListener());
         wavefrequency.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -154,12 +156,12 @@ public class signalgen extends Activity implements View.OnClickListener {
 
         audioManager=(AudioManager) getSystemService(Context.AUDIO_SERVICE);
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 15, 0);
-        wavefrequency = findViewById(R.id.freq);
+        wavefrequency = (EditText) findViewById(R.id.freq);
         wavefrequency.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        modulate = findViewById(R.id.modulate);
-        radio = findViewById(R.id.Group);
-        volumeseek = findViewById(R.id.volseek);
-        toggle = findViewById(R.id.toggle);
+        modulate = (SeekBar) findViewById(R.id.modulate);
+        radio = (RadioGroup) findViewById(R.id.Group);
+        volumeseek = (SeekBar) findViewById(R.id.volseek);
+        toggle = (ToggleButton) findViewById(R.id.toggle);
         wave = new Waveform();
     }
 
@@ -243,6 +245,13 @@ public class signalgen extends Activity implements View.OnClickListener {
             }
             return false;
         }
+    }
+
+    public void onBackPressed() {
+        Log.d("CDA", "onBackPressed Called");
+        Intent ob = new Intent(signalgen.this, mainmenu.class);
+        startActivity(ob);
+        signalgen.this.finish();
     }
 
 

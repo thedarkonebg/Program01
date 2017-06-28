@@ -9,12 +9,12 @@ android {
             storePassword '666grama'
         }
     }
-    compileSdkVersion 26
+    compileSdkVersion 25
     buildToolsVersion "25.0.3"
     defaultConfig {
         applicationId "com.altermovement.www.program01"
         minSdkVersion 16
-        targetSdkVersion 25
+        targetSdkVersion 21
         versionCode 1
         versionName "1.0"
         signingConfig signingConfigs.config
