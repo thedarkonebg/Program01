@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -19,6 +18,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.altermovement.www.program01.Waveform.Waveform;
+import com.jjoe64.graphview.GraphView;
 
 
 public class signalgen extends Activity implements View.OnClickListener {
@@ -27,8 +27,8 @@ public class signalgen extends Activity implements View.OnClickListener {
     private static int FACTOR_VOL = 327;
     private int frequency;
     private int amp;
-    private int mod;
-    Handler handler;
+    private short[] grapharray;
+    public static GraphView graphview;
 
     Waveform wave;
     EditText wavefrequency;
@@ -55,8 +55,8 @@ public class signalgen extends Activity implements View.OnClickListener {
         frequency = Integer.parseInt(wavefrequency.getText().toString());
         w = 2;
         amp = (volumeseek.getProgress() * FACTOR_VOL) + 1;
-        mod = 100;
 
+        graphview = (GraphView) findViewById(R.id.graph);
 
         wavefrequency.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -78,7 +78,6 @@ public class signalgen extends Activity implements View.OnClickListener {
                         wave.frequency = Integer.parseInt(wavefrequency.getText().toString());
                         InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         in.hideSoftInputFromWindow(wavefrequency.getApplicationWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
-                        //wave.mode = w;
                     }
                     return true;
                 }
@@ -86,11 +85,8 @@ public class signalgen extends Activity implements View.OnClickListener {
             }
         });
 
-
-
         modulate.setOnClickListener(this);
         modulate.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            int mod = 100;
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
@@ -147,36 +143,34 @@ public class signalgen extends Activity implements View.OnClickListener {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                // FACTOR value / 100 = x / 32767 (x = amplitude)
                 wave.amplitude = (volumeseek.getProgress() * FACTOR_VOL) + 1;
             }
         });
 
-        //wave.stop();
     }
 
     private void initializeView() {
 
         audioManager=(AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 15, 0);
         wavefrequency = (EditText) findViewById(R.id.freq);
         modulate = (SeekBar) findViewById(R.id.modulate);
         radio = (RadioGroup) findViewById(R.id.Group);
         volumeseek = (SeekBar) findViewById(R.id.volseek);
         toggle = (ToggleButton) findViewById(R.id.toggle);
         wave = new Waveform();
-
     }
+
+
 
 
     @Override
     public void onClick(View v) {
 
-        mod = 0;
         frequency = Integer.parseInt(wavefrequency.getText().toString());
         boolean on = toggle.isChecked();
         if (on) {
             if (wave != null)
-//                wave.start();
                 fadein();
         }
 
@@ -192,11 +186,9 @@ public class signalgen extends Activity implements View.OnClickListener {
             wave.stop();
     }
 
-    // On Resume
     @Override
-    protected void onResume()
-    {
-        super.onResume();
+    public void onPause() {
+        super.onPause();
     }
 
     public void fadeout(){
@@ -217,6 +209,7 @@ public class signalgen extends Activity implements View.OnClickListener {
         }
         wave.stop();
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, nextVol, 0);
+
     }
 
     public void fadein(){
@@ -228,7 +221,6 @@ public class signalgen extends Activity implements View.OnClickListener {
         wave.frequency = frequency;
         wave.mode = w;
         wave.amplitude = amp;
-
         while(initialVol < currentVol) {
             try {
                 Thread.sleep(25);
@@ -239,7 +231,9 @@ public class signalgen extends Activity implements View.OnClickListener {
             audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, initialVol + STEP_UP,0);
             initialVol = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
         }
+
     }
+
 }
 
 

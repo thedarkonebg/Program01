@@ -15,11 +15,19 @@
     app:layout_constraintRight_toRightOf="@+id/parent"
     app:layout_constraintTop_toTopOf="@+id/parent">
 
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/bg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:scaleType="fitXY"/>
 
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/bg"
         android:foregroundGravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -45,7 +53,9 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/midilogo" />
+                app:srcCompat="@drawable/midilogo"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
