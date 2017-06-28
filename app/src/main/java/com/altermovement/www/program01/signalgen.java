@@ -44,6 +44,8 @@ public class signalgen extends Activity implements View.OnClickListener {
 
         super.onCreate(savedInstanceState);
 
+
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -52,17 +54,19 @@ public class signalgen extends Activity implements View.OnClickListener {
         setContentView(R.layout.signalgen);
         initializeView();
 
+
         frequency = Integer.parseInt(wavefrequency.getText().toString());
         w = 2;
         amp = (volumeseek.getProgress() * FACTOR_VOL) + 1;
 
-        graphview = (GraphView) findViewById(R.id.graph);
+        graphview = findViewById(R.id.graph);
 
+        wavefrequency.setOnEditorActionListener(new DoneOnEditorActionListener());
         wavefrequency.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    getApplicationContext();
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent arg2) {
+                if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT || (arg2.getAction() == KeyEvent.KEYCODE_ENTER)) {
+
                     frequency = Integer.parseInt(wavefrequency.getText().toString());
                     if (frequency < 10){
                         wavefrequency.setText("20");
@@ -76,15 +80,12 @@ public class signalgen extends Activity implements View.OnClickListener {
                         Toast.makeText(getApplicationContext(), "FREQUENCY TOO LOW", Toast.LENGTH_LONG).show();
                     } else {
                         wave.frequency = Integer.parseInt(wavefrequency.getText().toString());
-                        InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        in.hideSoftInputFromWindow(wavefrequency.getApplicationWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
                     }
                     return true;
                 }
                 return false;
             }
         });
-
         modulate.setOnClickListener(this);
         modulate.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
@@ -153,16 +154,14 @@ public class signalgen extends Activity implements View.OnClickListener {
 
         audioManager=(AudioManager) getSystemService(Context.AUDIO_SERVICE);
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 15, 0);
-        wavefrequency = (EditText) findViewById(R.id.freq);
-        modulate = (SeekBar) findViewById(R.id.modulate);
-        radio = (RadioGroup) findViewById(R.id.Group);
-        volumeseek = (SeekBar) findViewById(R.id.volseek);
-        toggle = (ToggleButton) findViewById(R.id.toggle);
+        wavefrequency = findViewById(R.id.freq);
+        wavefrequency.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        modulate = findViewById(R.id.modulate);
+        radio = findViewById(R.id.Group);
+        volumeseek = findViewById(R.id.volseek);
+        toggle = findViewById(R.id.toggle);
         wave = new Waveform();
     }
-
-
-
 
     @Override
     public void onClick(View v) {
@@ -233,6 +232,19 @@ public class signalgen extends Activity implements View.OnClickListener {
         }
 
     }
+
+    private class DoneOnEditorActionListener implements TextView.OnEditorActionListener {
+        @Override
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                InputMethodManager imm = (InputMethodManager)v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                return true;
+            }
+            return false;
+        }
+    }
+
 
 }
 

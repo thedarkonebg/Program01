@@ -9,11 +9,6 @@ import com.altermovement.www.program01.signalgen;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
-
-/**
- * Created by The Dark One on 15.6.2017 г..
- */
-
 public class Waveform implements Runnable{
 
     private Thread thread;
@@ -21,12 +16,7 @@ public class Waveform implements Runnable{
     public int mode;
     public int amplitude;
     public int mod = 0;
-    private short[] samples;
-    int size;
-    short[] graph;
-    int x;
-    int i;
-    int datasize;
+    private DataPoint[] datapp;
 
     private LineGraphSeries<DataPoint> waveseries;
 
@@ -45,7 +35,7 @@ public class Waveform implements Runnable{
         int minSize = AudioTrack.getMinBufferSize(rate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT);
 
         int sizes[] = {1024, 2048, 4096, 8192, 16384, 32768};
-        size = 0;
+        int size = 0;
 
         for (int s : sizes) {
             if (s > minSize) {
@@ -66,27 +56,27 @@ public class Waveform implements Runnable{
 
         myWave.play();
 
-        samples = new short[size];
+
+        short[] samples = new short[size];
         short carrier[] = new short[size];
-        graph = new short[size];
+
         double doublepi = 8. * Math.atan(1.0);
         double phase = 0.0;
         double phasemod = 0.0;
-        x = 0;
-        i = 0;
-        DataPoint datap;
 
-        datasize = (size / 32);
-        final DataPoint[] datapp = new DataPoint[datasize];
+        int x = 0;
+        int i;
+        int datasize = (size / 32);
+
+        datapp = new DataPoint[datasize];
 
         signalgen.graphview.getViewport().setXAxisBoundsManual(true);
-        signalgen.graphview.getViewport().setMinX(0);
-        signalgen.graphview.getViewport().setMaxX(datasize / 2);
+        signalgen.graphview.getViewport().setMinX(8);
+        signalgen.graphview.getViewport().setMaxX(datasize/2 - 8);
 
         signalgen.graphview.getViewport().setYAxisBoundsManual(true);
         signalgen.graphview.getViewport().setMinY(-amplitude);
         signalgen.graphview.getViewport().setMaxY(+amplitude);
-        signalgen.graphview.getViewport().setScrollable(true);
         signalgen.graphview.getViewport().setBackgroundColor(Color.rgb(255, 255, 255));
 
         waveseries = new LineGraphSeries<>();
@@ -140,22 +130,6 @@ public class Waveform implements Runnable{
                         break;
                 }
 
-//                if (x == 0) {
-//                    datap = new DataPoint(x, samples[i]);
-//                    waveseries.appendData(datap, true, datasize);
-//                    x += 1;
-//                }
-//
-//                if (i == (x * 16) - 1) {
-//                    datap = new DataPoint(x, samples[i]);
-//                    waveseries.appendData(datap, true, datasize);
-//                    x += 1;
-//                }
-//
-//                if (x >= datasize - 1) {
-//                    x = 0;
-//                }
-
                 if (i == ((x * 32) - 1) || x == 0) {
                     datapp[x] = new DataPoint(x, samples[i]);
                     x += 1;
@@ -163,10 +137,11 @@ public class Waveform implements Runnable{
                 if (x >= datasize) {
                     x = 0;
                 }
+
             }
 
             myWave.write(samples, 0, samples.length);
-//            new gograph().execute(datapp);
+
             new Thread(new Runnable() {
                 public void run() {
                     waveseries.resetData(datapp);
@@ -175,14 +150,13 @@ public class Waveform implements Runnable{
 
         }
 
-
         myWave.stop();
         myWave.release();
     }
 
     public void start() {
 
-        signalgen.graphview.removeAllSeries();
+
         amplitude = 32767;
         thread = new Thread(this, "myWave");
         thread.start();
@@ -191,6 +165,7 @@ public class Waveform implements Runnable{
 
     public void stop() {
 
+        signalgen.graphview.removeAllSeries();
         Thread t = thread;
         thread = null;
         // Wait for the thread to exit
@@ -219,6 +194,7 @@ public class Waveform implements Runnable{
     private short saw(int am, double ph) {
         return (short) Math.round(am * Math.round((ph) / Math.PI));
     }
+
 
 //    class gograph extends AsyncTask<DataPoint[], Void, Void>{
 //
