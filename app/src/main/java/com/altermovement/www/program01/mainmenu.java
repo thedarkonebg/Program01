@@ -60,8 +60,8 @@ public class mainmenu extends AppCompatActivity{
 
 			@Override
 			public void onClick(View v) {
-				Intent ob = new Intent(mainmenu.this, midicontroller.class);
-				startActivity(ob);
+
+				startActivity(new Intent(getApplicationContext(), midicontroller.class));
 			}
 		});
 
@@ -80,10 +80,7 @@ public class mainmenu extends AppCompatActivity{
 			@Override
 			public void onClick(View v) {
 
-				Intent ob = new Intent(mainmenu.this, signalgen.class);
-				startActivity(ob);
-				finish();
-
+				startActivity(new Intent(getApplicationContext(), oscillator.class));
 			}
 		});
 

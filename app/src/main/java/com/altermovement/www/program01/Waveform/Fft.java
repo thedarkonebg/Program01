@@ -4,11 +4,9 @@ package com.altermovement.www.program01.Waveform;
  * Created by The Dark One on 23.6.2017 г..
  */
 
-public class Fft extends Waveform {
+public class Fft {
 
     public short[] data = new short[22051];
-    public Waveform wave;
-
     public Fft(short a[], int N) {
         for (int i = 0; i < 22051; i++) {
             data[i] = 0;
