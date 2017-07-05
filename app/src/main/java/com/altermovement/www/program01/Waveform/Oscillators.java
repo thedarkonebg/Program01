@@ -53,7 +53,7 @@ public class Oscillators implements Runnable{
 
         for (int s : sizes) {
             if (s > minSize) {
-                size = s * 2;
+                size = s;
                 break;
             }
         }
@@ -67,7 +67,7 @@ public class Oscillators implements Runnable{
             return;
         }
 
-        myWave.play();
+//        myWave.play();
 
 
         // MOD BOOLEAN INITIAL STATE = FALSE
@@ -138,7 +138,7 @@ public class Oscillators implements Runnable{
         oscillator.graphview.addSeries(waveseries);
 
         // WAVEFORM GENERATOR MAIN THREAD
-
+        myWave.play();
         while (thread != null) {
 
             for (i = 0; i < samples.length; i++) {

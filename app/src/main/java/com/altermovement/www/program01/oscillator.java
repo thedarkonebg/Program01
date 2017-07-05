@@ -111,7 +111,7 @@ public class oscillator extends Activity implements View.OnClickListener {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
                 wave.frequency_b = ((wavefreq_min + wavefrequency_b.getProgress()) * 5);
-                freqtext_a.setText(String.valueOf((wavefreq_min + wavefrequency_a.getProgress()) * 5));
+                freqtext_b.setText(String.valueOf((wavefreq_min + wavefrequency_b.getProgress()) * 5));
             }
 
             @Override
