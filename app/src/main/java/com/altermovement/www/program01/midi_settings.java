@@ -1,9 +1,7 @@
 package com.altermovement.www.program01;
 
 import android.app.Activity;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -32,31 +30,6 @@ public class midi_settings extends Activity implements NMJSystemListener, Networ
         overridePendingTransition(R.anim.anim_fadein, R.anim.anim_fadeout);
 
         NMJConfig.addSystemListener(this);
-
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-        if (prefs.getLong("firstRun", -1) == -1) {
-
-            try {
-                NMJConfig.resetAll();
-                NMJConfig.edit(this, true);
-                int chIdx = NMJConfig.addChannel();
-                NMJConfig.setMode(chIdx, NMJConfig.RTPA);
-                NMJConfig.setIO(1, NMJConfig.OUT);
-                NMJConfig.setIP(1, "192.168.1.4");
-                NMJConfig.setPort(1, 5004);
-                NMJConfig.setName(1, "MIDI Ch.1");
-
-                SharedPreferences.Editor editor = prefs.edit();
-
-                NetworkMidiOutput midiout = nmjs.openOutput(1, this);
-                midiout.sendMidi(new byte[]{(byte)0x80, 7, 0});
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
         setContentView(R.layout.midi_settings);
 
     }

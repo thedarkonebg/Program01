@@ -10,7 +10,9 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.altermovement.www.program01.Waveform.Oscillators;
@@ -23,14 +25,27 @@ public class oscillator extends Activity implements View.OnClickListener {
 
     private int amp_main;
     private int wavefreq_min = 2;
+    private int currentVol;
 
     public static GraphView graphview;
 
     Oscillators wave;
 
+    TextView freqtext_a;
+    TextView freqtext_b;
+    TextView freqtext_c;
+
     SeekBar wavefrequency_a;
     SeekBar wavefrequency_b;
     SeekBar wavefrequency_c;
+
+    Button aminus;
+    Button bminus;
+    Button cminus;
+
+    Button aplus;
+    Button bplus;
+    Button cplus;
 
     SeekBar volumeseek_a;
     SeekBar volumeseek_b;
@@ -46,6 +61,7 @@ public class oscillator extends Activity implements View.OnClickListener {
     SeekBar modulate_amp;
 
     ToggleButton startstop;
+
 
 
     public static AudioManager audioManager;
@@ -64,7 +80,6 @@ public class oscillator extends Activity implements View.OnClickListener {
         initializeView();
 
         amp_main = (volumeseek_main.getProgress() * FACTOR_VOL) + 1;
-
         graphview = (GraphView) findViewById(R.id.graph);
 
         // WAVEFORM A B C FREQUENCY
@@ -74,7 +89,8 @@ public class oscillator extends Activity implements View.OnClickListener {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
-                wave.frequency_a = wavefrequency_a.getProgress() * 10;
+                wave.frequency_a = ((wavefreq_min + wavefrequency_a.getProgress()) * 5);
+                freqtext_a.setText(String.valueOf((wavefreq_min + wavefrequency_a.getProgress()) * 5));
             }
 
             @Override
@@ -84,7 +100,8 @@ public class oscillator extends Activity implements View.OnClickListener {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                wave.frequency_a = wavefrequency_a.getProgress() * 10;
+                wave.frequency_a = ((wavefreq_min + wavefrequency_a.getProgress()) * 5);
+                freqtext_a.setText(String.valueOf((wavefreq_min + wavefrequency_a.getProgress()) * 5));
             }
         });
 
@@ -93,7 +110,8 @@ public class oscillator extends Activity implements View.OnClickListener {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
-                wave.frequency_b = wavefreq_min + (wavefrequency_b.getProgress() * 10);
+                wave.frequency_b = ((wavefreq_min + wavefrequency_b.getProgress()) * 5);
+                freqtext_a.setText(String.valueOf((wavefreq_min + wavefrequency_a.getProgress()) * 5));
             }
 
             @Override
@@ -103,7 +121,8 @@ public class oscillator extends Activity implements View.OnClickListener {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                wave.frequency_b = wavefreq_min + (wavefrequency_b.getProgress() * 10);
+                wave.frequency_b = ((wavefreq_min + wavefrequency_b.getProgress()) * 5);
+                freqtext_b.setText(String.valueOf((wavefreq_min + wavefrequency_b.getProgress()) * 5));
             }
         });
 
@@ -112,7 +131,8 @@ public class oscillator extends Activity implements View.OnClickListener {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
-                wave.frequency_c = wavefreq_min + (wavefrequency_c.getProgress() * 10);
+                wave.frequency_c = ((wavefreq_min + wavefrequency_c.getProgress()) * 5);
+                freqtext_c.setText(String.valueOf((wavefreq_min + wavefrequency_c.getProgress()) * 5));
             }
 
             @Override
@@ -122,18 +142,19 @@ public class oscillator extends Activity implements View.OnClickListener {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                wave.frequency_c = wavefreq_min + (wavefrequency_c.getProgress() * 10);
+                wave.frequency_c = ((wavefreq_min + wavefrequency_c.getProgress()) * 5);
+                freqtext_c.setText(String.valueOf((wavefreq_min + wavefrequency_c.getProgress()) * 5));
             }
         });
 
         // WAVEFORM A B C AMPLITUDE
-
+        volumeseek_a.setProgress(50);
         volumeseek_a.setOnClickListener(this);
         volumeseek_a.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
-                wave.amplitude_a = volumeseek_a.getProgress() * 10;
+                wave.amplitude_a = (volumeseek_a.getProgress() * 327);
             }
 
             @Override
@@ -143,7 +164,7 @@ public class oscillator extends Activity implements View.OnClickListener {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                wave.amplitude_a = volumeseek_a.getProgress() * 10;
+                wave.amplitude_a = (volumeseek_a.getProgress() * 327);
             }
         });
 
@@ -152,7 +173,7 @@ public class oscillator extends Activity implements View.OnClickListener {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
-                wave.amplitude_b = volumeseek_b.getProgress() * 10;
+                wave.amplitude_b = (volumeseek_b.getProgress() * 327);
             }
 
             @Override
@@ -162,7 +183,7 @@ public class oscillator extends Activity implements View.OnClickListener {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                wave.amplitude_b = volumeseek_b.getProgress() * 10;
+                wave.amplitude_b = (volumeseek_b.getProgress() * 327);
             }
         });
 
@@ -171,7 +192,7 @@ public class oscillator extends Activity implements View.OnClickListener {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
-                wave.amplitude_c = volumeseek_c.getProgress() * 10;
+                wave.amplitude_c = (volumeseek_c.getProgress() * 327);
         }
 
             @Override
@@ -181,7 +202,7 @@ public class oscillator extends Activity implements View.OnClickListener {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                wave.amplitude_a = volumeseek_c.getProgress() * 10;
+                wave.amplitude_a = (volumeseek_c.getProgress() * 327);
             }
         });
 
@@ -192,17 +213,17 @@ public class oscillator extends Activity implements View.OnClickListener {
         wavemode_a.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
+            public void onProgressChanged(SeekBar wavemode_a, int progressValue, boolean fromUser) {
                 wave.mode_a = (wavemode_a.getProgress() + 1);
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
+            public void onStartTrackingTouch(SeekBar wavemode_a) {
                 // TODO Auto-generated method stub
             }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
+            public void onStopTrackingTouch(SeekBar wavemode_a) {
                 wave.mode_a = (wavemode_a.getProgress() + 1);
             }
         });
@@ -212,17 +233,17 @@ public class oscillator extends Activity implements View.OnClickListener {
         wavemode_b.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
+            public void onProgressChanged(SeekBar wavemode_b, int progressValue, boolean fromUser) {
                 wave.mode_b = (wavemode_b.getProgress() + 1);
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
+            public void onStartTrackingTouch(SeekBar wavemode_b) {
                 // TODO Auto-generated method stub
             }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
+            public void onStopTrackingTouch(SeekBar wavemode_b) {
                 wave.mode_b = (wavemode_b.getProgress() + 1);
             }
         });
@@ -232,29 +253,29 @@ public class oscillator extends Activity implements View.OnClickListener {
         wavemode_c.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
-                wave.mode_c = wavemode_c.getProgress() + 1;
+            public void onProgressChanged(SeekBar wavemode_c, int progressValue, boolean fromUser) {
+                wave.mode_c = (wavemode_c.getProgress() + 1);
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
+            public void onStartTrackingTouch(SeekBar wavemode_c) {
                 // TODO Auto-generated method stub
             }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                wave.mode_c = wavemode_c.getProgress() + 1;
+            public void onStopTrackingTouch(SeekBar wavemode_c) {
+                wave.mode_c = (wavemode_c.getProgress() + 1);
             }
         });
 
         // MODULATE FREQUENCY AND AMPLITUDE
-
+        modulate_amp.setProgress(0);
         modulate_amp.setOnClickListener(this);
         modulate_amp.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
-                wave.mod_amp = modulate_amp.getProgress() * 10;
+                wave.mod_amp = modulate_amp.getProgress();
             }
 
             @Override
@@ -264,16 +285,16 @@ public class oscillator extends Activity implements View.OnClickListener {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                wave.mod_amp = modulate_amp.getProgress() * 10;
+                wave.mod_amp = modulate_amp.getProgress();
             }
         });
-
+        modulate_freq.setProgress(0);
         modulate_freq.setOnClickListener(this);
         modulate_freq.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
-                wave.mod = modulate_freq.getProgress() * 10;
+                wave.mod = modulate_freq.getProgress() * 0.1;
             }
 
             @Override
@@ -283,13 +304,13 @@ public class oscillator extends Activity implements View.OnClickListener {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                wave.mod = modulate_freq.getProgress() * 10;
+                wave.mod = modulate_freq.getProgress() * 0.1;
             }
         });
 
         // MAIN WAVE AMPLITUDE
 
-        volumeseek_main.setProgress(100);
+        volumeseek_main.setProgress(50);
         volumeseek_main.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
@@ -310,11 +331,66 @@ public class oscillator extends Activity implements View.OnClickListener {
 
         // START / STOP TOGGLE
 
+        freqtext_a.setText(String.valueOf((wavefreq_min + wavefrequency_a.getProgress()) * 5));
+        freqtext_b.setText(String.valueOf((wavefreq_min + wavefrequency_b.getProgress()) * 5));
+        freqtext_c.setText(String.valueOf((wavefreq_min + wavefrequency_c.getProgress()) * 5));
+
         startstop.setOnClickListener(this);
+
+
+        aminus.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                wavefrequency_a.setProgress(wavefrequency_a.getProgress() - 1);
+            }
+        });
+
+        bminus.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                wavefrequency_b.setProgress(wavefrequency_b.getProgress() - 1);
+            }
+        });
+
+        cminus.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                wavefrequency_c.setProgress(wavefrequency_c.getProgress() - 1);
+            }
+        });
+
+
+        aplus.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                wavefrequency_a.setProgress(wavefrequency_a.getProgress() + 1);
+            }
+        });
+
+        bplus.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                wavefrequency_b.setProgress(wavefrequency_b.getProgress() + 1);
+            }
+        });
+
+        cplus.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                wavefrequency_c.setProgress(wavefrequency_c.getProgress() + 1);
+            }
+        });
+
 
     }
 
     private void initializeView() {
+
+        aminus = (Button) findViewById(R.id.aminus);
+        bminus = (Button) findViewById(R.id.bminus);
+        cminus = (Button) findViewById(R.id.cminus);
+
+        aplus = (Button) findViewById(R.id.aplus);
+        bplus = (Button) findViewById(R.id.bplus);
+        cplus = (Button) findViewById(R.id.cplus);
+
+        freqtext_a = (TextView) findViewById(R.id.frequency_a);
+        freqtext_b = (TextView) findViewById(R.id.frequency_b);
+        freqtext_c = (TextView) findViewById(R.id.frequency_c);
 
         audioManager=(AudioManager) getSystemService(Context.AUDIO_SERVICE);
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 15, 0);
@@ -333,8 +409,8 @@ public class oscillator extends Activity implements View.OnClickListener {
 
         volumeseek_main = (SeekBar) findViewById(R.id.ampseek_main);
 
-        modulate_freq = (SeekBar) findViewById(R.id.modamp_seek);
-        modulate_amp = (SeekBar) findViewById(R.id.modfreq_seek);
+        modulate_freq = (SeekBar) findViewById(R.id.modfreq_seek);
+        modulate_amp = (SeekBar) findViewById(R.id.modamp_seek);
 
         startstop = (ToggleButton) findViewById(R.id.startstop);
         wave = new Oscillators();
@@ -342,20 +418,6 @@ public class oscillator extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-
-        wave.frequency_a = wavefreq_min + (wavefrequency_a.getProgress() * 10);
-        wave.frequency_b = wavefreq_min + (wavefrequency_b.getProgress() * 10);
-        wave.frequency_c = wavefreq_min + (wavefrequency_c.getProgress() * 10);
-
-        wave.amplitude_a = volumeseek_a.getProgress() * 10;
-        wave.amplitude_b = volumeseek_b.getProgress() * 10;
-        wave.amplitude_c = volumeseek_c.getProgress() * 10;
-
-        wave.amplitude = amp_main;
-        volumeseek_main.setProgress(100);
-
-        wave.mod = modulate_freq.getProgress() * 10;
-        wave.mod_amp = modulate_amp.getProgress() * 10;
 
         boolean on = startstop.isChecked();
         if (on) {
@@ -385,7 +447,7 @@ public class oscillator extends Activity implements View.OnClickListener {
     public void fadeout(){
         int targetVol = 0;
         int STEP_DOWN=2;
-        int currentVol = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        currentVol = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
         int nextVol=currentVol;
         // fade music gently
         while(currentVol > targetVol) {
@@ -407,23 +469,30 @@ public class oscillator extends Activity implements View.OnClickListener {
 
         int initialVol = 0;
         int STEP_UP=2;
-        int currentVol = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        currentVol = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, 0);
-        wave.start();
 
-        wave.frequency_a = wavefreq_min + (wavefrequency_a.getProgress() * 10);
-        wave.frequency_b = wavefreq_min + (wavefrequency_b.getProgress() * 10);
-        wave.frequency_c = wavefreq_min + (wavefrequency_c.getProgress() * 10);
 
-        wave.amplitude_a = volumeseek_a.getProgress() * 10;
-        wave.amplitude_b = volumeseek_b.getProgress() * 10;
-        wave.amplitude_c = volumeseek_c.getProgress() * 10;
+
+        wave.frequency_a = (wavefreq_min + wavefrequency_a.getProgress()) * 5;
+        wave.frequency_b = (wavefreq_min + wavefrequency_b.getProgress()) * 5;
+        wave.frequency_c = (wavefreq_min + wavefrequency_c.getProgress()) * 5;
+
+        wave.amplitude_a = volumeseek_a.getProgress() * 327;
+        wave.amplitude_b = volumeseek_b.getProgress() * 327;
+        wave.amplitude_c = volumeseek_c.getProgress() * 327;
+
+        wave.mode_a = 2;
+        wave.mode_b = 2;
+        wave.mode_c = 2;
 
         wave.amplitude = amp_main;
-        volumeseek_main.setProgress(100);
+        volumeseek_main.setProgress(50);
 
-        wave.mod = modulate_freq.getProgress() * 10;
-        wave.mod_amp = modulate_amp.getProgress() * 10;
+        wave.mod = ( modulate_freq.getProgress() * 0.1);
+        wave.mod_amp = modulate_amp.getProgress();
+
+        wave.start();
 
         while(initialVol < currentVol) {
             try {

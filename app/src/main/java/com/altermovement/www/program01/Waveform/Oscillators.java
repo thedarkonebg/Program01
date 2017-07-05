@@ -16,20 +16,20 @@ public class Oscillators implements Runnable{
     // WAVE GENERATOR PUBLIC VARIABLES
 
     public int frequency_a;
-    public int mode_a = 1;
+    public int mode_a;
     public int amplitude_a;
 
     public int frequency_b;
-    public int mode_b = 1;
+    public int mode_b;
     public int amplitude_b;
 
     public int frequency_c;
-    public int mode_c = 1;
+    public int mode_c;
     public int amplitude_c;
 
     public int amplitude = 32700;
 
-    public int mod = 0;
+    public double mod = 0;
     public boolean mod_a;
     public boolean mod_b;
     public boolean mod_c;
@@ -44,7 +44,8 @@ public class Oscillators implements Runnable{
 
         // AUDIOTRACK INIT PARAMETERS
 
-        int rate = AudioTrack.getNativeOutputSampleRate(AudioManager.STREAM_MUSIC);
+       int rate = AudioTrack.getNativeOutputSampleRate(AudioManager.STREAM_MUSIC);
+//        int rate = 48000;
         int minSize = AudioTrack.getMinBufferSize(rate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT);
 
         int sizes[] = {1024, 2048, 4096, 8192, 16384, 32768};
@@ -52,7 +53,7 @@ public class Oscillators implements Runnable{
 
         for (int s : sizes) {
             if (s > minSize) {
-                size = s;
+                size = s * 2;
                 break;
             }
         }
@@ -108,24 +109,30 @@ public class Oscillators implements Runnable{
         // ITERATOR PARAMETERS
 
         int x = 0;
+        int y = 0;
         int i;
 
         // GRAPH ARRAY DATA SIZE
-        int factor = 32;
-        int datasize = (size / factor);
+        int datasize = 72;
 
         // GRAPH INIT PARAMETERS
 
         datapp = new DataPoint[datasize];
 
         oscillator.graphview.getViewport().setXAxisBoundsManual(true);
-        oscillator.graphview.getViewport().setMinX(8);
-        oscillator.graphview.getViewport().setMaxX(datasize/2 - 8);
+        oscillator.graphview.getViewport().setMinX(4);
+        oscillator.graphview.getViewport().setMaxX(datasize-4);
 
         oscillator.graphview.getViewport().setYAxisBoundsManual(true);
-        oscillator.graphview.getViewport().setMinY(-amplitude * 0.01);
-        oscillator.graphview.getViewport().setMaxY(+amplitude * 0.01);
-        oscillator.graphview.getViewport().setBackgroundColor(Color.rgb(255, 255, 255));
+        oscillator.graphview.getViewport().setMinY(-amplitude);
+        oscillator.graphview.getViewport().setMaxY(+amplitude);
+
+        oscillator.graphview.getViewport().setBackgroundColor(Color.rgb(64, 64, 64));
+
+        oscillator.graphview.getLegendRenderer().setVisible(false);
+        oscillator.graphview.getGridLabelRenderer().setVerticalLabelsVisible(false);
+        oscillator.graphview.getGridLabelRenderer().setHorizontalLabelsVisible(false);
+        oscillator.graphview.getGridLabelRenderer().setHighlightZeroLines(false);
 
         waveseries = new LineGraphSeries<>();
         oscillator.graphview.addSeries(waveseries);
@@ -136,6 +143,7 @@ public class Oscillators implements Runnable{
 
             for (i = 0; i < samples.length; i++) {
 
+                // WAVE {A, B, C, MOD} PHASE
                 // WAVE A PHASE
 
                 if (phase_a < Math.PI) {
@@ -170,17 +178,15 @@ public class Oscillators implements Runnable{
 
                 carrier_mod[i] = sine(mod_amp, phasemod);
 
-                // GENERATE WAVEFORM A
-
                 switch (mode_a) {
 
                     case 1: // SQUARE WAVE
 
                         if (mod == 0 && mod_a) {
                             samples_a[i] = square(amplitude_a, phase_a);
-                        } else {
+                        } else if (mod != 0){
                             carrier_a[i] = square(amplitude_a, phase_a);
-                            samples_a[i] = (short)(carrier_mod[i] * modulate(carrier_a[i], phase_a, phasemod));
+                            samples_a[i] = modulate(carrier_a[i], phase_a, phasemod, carrier_mod[i]);
                         }
                         break;
 
@@ -188,9 +194,9 @@ public class Oscillators implements Runnable{
 
                         if (mod == 0 && mod_a) {
                             samples_a[i] = sine(amplitude_a, phase_a);
-                        } else {
+                        } else if (mod != 0){
                             carrier_a[i] = sine(amplitude_a, phase_a);
-                            samples_a[i] = (short)(carrier_mod[i] * modulate(carrier_a[i], phase_a, phasemod));
+                            samples_a[i] = modulate(carrier_a[i], phase_a, phasemod, carrier_mod[i]);
                         }
                         break;
 
@@ -198,9 +204,9 @@ public class Oscillators implements Runnable{
 
                         if (mod == 0 && mod_a) {
                             samples_a[i] = saw(amplitude_a, phase_a);
-                        } else {
+                        } else if (mod != 0){
                             carrier_a[i] = saw(amplitude_a, phase_a);
-                            samples_a[i] = (short)(carrier_mod[i] * modulate(carrier_a[i], phase_a, phasemod));
+                            samples_a[i] = modulate(carrier_a[i], phase_a, phasemod, carrier_mod[i]);
                         }
                         break;
                 }
@@ -213,9 +219,9 @@ public class Oscillators implements Runnable{
 
                         if (mod == 0 && mod_b) {
                             samples_b[i] = square(amplitude_b, phase_b);
-                        } else {
+                        } else if (mod != 0){
                             carrier_b[i] = square(amplitude_b, phase_b);
-                            samples_b[i] = (short)(carrier_mod[i] * modulate(carrier_b[i], phase_b, phasemod));
+                            samples_b[i] = modulate(carrier_b[i], phase_b, phasemod, carrier_mod[i]);
                         }
                         break;
 
@@ -223,9 +229,9 @@ public class Oscillators implements Runnable{
 
                         if (mod == 0 && mod_b) {
                             samples_b[i] = sine(amplitude_b, phase_b);
-                        } else {
+                        } else if (mod != 0){
                             carrier_b[i] = sine(amplitude_b, phase_b);
-                            samples_b[i] = (short)(carrier_mod[i] * modulate(carrier_b[i], phase_b, phasemod));
+                            samples_b[i] = modulate(carrier_b[i], phase_b, phasemod, carrier_mod[i]);
                         }
                         break;
 
@@ -233,9 +239,9 @@ public class Oscillators implements Runnable{
 
                         if (mod == 0 && mod_b) {
                             samples_b[i] = saw(amplitude_b, phase_b);
-                        } else {
+                        } else if (mod != 0){
                             carrier_b[i] = saw(amplitude_b, phase_b);
-                            samples_b[i] = (short)(carrier_mod[i] * modulate(carrier_b[i], phase_b, phasemod));
+                            samples_b[i] = modulate(carrier_b[i], phase_b, phasemod, carrier_mod[i]);
                         }
                         break;
                 }
@@ -248,9 +254,9 @@ public class Oscillators implements Runnable{
 
                         if (mod == 0 && mod_c) {
                             samples_c[i] = square(amplitude_c, phase_c);
-                        } else {
+                        } else if (mod != 0){
                             carrier_c[i] = square(amplitude_c, phase_c);
-                            samples_c[i] = (short)(carrier_mod[i] * modulate(carrier_c[i], phase_c, phasemod));
+                            samples_c[i] = modulate(carrier_c[i], phase_c, phasemod, carrier_mod[i]);
                         }
                         break;
 
@@ -258,9 +264,9 @@ public class Oscillators implements Runnable{
 
                         if (mod == 0 && mod_c) {
                             samples_c[i] = sine(amplitude_c, phase_c);
-                        } else {
+                        } else if (mod != 0){
                             carrier_c[i] = sine(amplitude_c, phase_c);
-                            samples_c[i] = (short)(carrier_mod[i] * modulate(carrier_c[i], phase_c, phasemod));
+                            samples_c[i] = modulate(carrier_c[i], phase_c, phasemod, carrier_mod[i]);
                         }
                         break;
 
@@ -268,38 +274,36 @@ public class Oscillators implements Runnable{
 
                         if (mod == 0 && mod_c) {
                             samples_c[i] = saw(amplitude_c, phase_c);
-                        } else {
+                        } else if (mod != 0){
                             carrier_c[i] = saw(amplitude_c, phase_c);
-                            samples_c[i] = (short)(carrier_mod[i] * modulate(carrier_c[i], phase_c, phasemod));
+                            samples_c[i] = modulate(carrier_c[i], phase_c, phasemod, carrier_mod[i]);
                         }
                         break;
                 }
 
-                short temp = (short)(samples_a[i] + samples_b[i] + samples_c[i]);
                 short three = 3;
-                samples[i] = (short)((temp / three) * amplitude / 32767);
+                short temp_a = (short)((samples_a[i] + samples_b[i] + samples_c[i]) / three);
+                samples[i] = (short) (temp_a  * amplitude / 32767);
 
-
-                // WAVE DATAPOINT CALCULATION AND ADD IN DATAPOINT ARRAY
-
-                if (i == ((x * 16) - 1) || x == 0) {
-                    int temp_graph = (int)Math.round(samples[i] * 0.01);
-                    datapp[x] = new DataPoint(x, temp_graph);
-                    x += 1;
-                }
                 if (x >= datasize) {
                     x = 0;
                 }
+                if (i == x * 16 || x == 0) {
+                    int temp_graph = samples[i];
+                    datapp[x] = new DataPoint(x, temp_graph);
+                    x += 1;
+                }
+
 
             }
-
             myWave.write(samples, 0, samples.length);
-
-            new Thread(new Runnable() {
-                public void run() {
+//
+//            new Thread(new Runnable() {
+//                public void run() {
                     waveseries.resetData(datapp);
-                }
-            }).start();
+//                }
+//
+//            }).start();
 
         }
 
@@ -331,21 +335,33 @@ public class Oscillators implements Runnable{
         setWave();
     }
 
-    private short modulate(short am, double ph, double fph){
-        return (short) (am * Math.cos( ph + Math.sin(fph) ));
+    private short modulate(short am, double ph, double fph, short fm) {
+        return (short) (am * Math.cos(ph + fm * Math.sin(fph)));
     }
 
     private short square(int am, double ph) {
         return (short) Math.round(am * Math.signum(Math.sin(ph)));
+
+//        return (short)(am * Math.signum( Math.sin(ph) ));
     }
 
     private short sine(int am, double ph) {
-        return (short) Math.round(am * Math.sin(ph));
+        return (short)(am * Math.sin(ph));
     }
 
     private short saw(int am, double ph) {
         return (short) Math.round(am * Math.round((ph) / Math.PI));
     }
+
+    private double getphase(double twopi, double phase, int rate, int freq){
+        if (phase < twopi) {
+            phase += twopi * freq * rate;
+        } else {
+            phase += (twopi * freq / rate) - (2 * Math.PI);
+        }
+        return phase;
+    }
+
 
 
 //    class gograph extends AsyncTask<DataPoint[], Void, Void>{
