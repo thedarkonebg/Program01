@@ -7,18 +7,9 @@ import android.view.WindowManager;
 
 import de.humatic.nmj.NMJConfig;
 import de.humatic.nmj.NMJSystemListener;
-import de.humatic.nmj.NetworkMidiInput;
 import de.humatic.nmj.NetworkMidiListener;
-import de.humatic.nmj.NetworkMidiOutput;
-import de.humatic.nmj.NetworkMidiSystem;
 
 public class midi_settings extends Activity implements NMJSystemListener, NetworkMidiListener {
-
-    private NetworkMidiInput midiIn;
-    private NetworkMidiOutput midiOut;
-    private byte[] myNote = new byte[]{(byte) 0x90, (byte) 0x24, 0};
-    private NetworkMidiSystem nmjs;
-    private int lastPosition;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
