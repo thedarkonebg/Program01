@@ -97,11 +97,12 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="4dp"
                 android:background="#AAAAAA"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+                app:layout_constraintHorizontal_bias="0.375"
+                android:layout_marginTop="4dp"
+                app:layout_constraintTop_toBottomOf="@+id/wavebi" />
 
             <View
                 android:id="@+id/view3"
@@ -248,7 +249,8 @@
                 android:thumbOffset="8dp"
                 app:layout_constraintLeft_toRightOf="@+id/textView15"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/modfreq_seek" />
+                app:layout_constraintTop_toBottomOf="@+id/modfreq_seek"
+                app:layout_constraintHorizontal_bias="0.0" />
 
             <SeekBar
                 android:id="@+id/modeseek_c"
@@ -269,23 +271,22 @@
                 android:id="@+id/frequency_a"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:layout_marginTop="8dp"
                 android:text="     "
                 android:textColor="@android:color/background_light"
                 android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@+id/freqseek_a"
                 app:layout_constraintLeft_toRightOf="@+id/aminus"
-                android:layout_marginLeft="8dp"
                 app:layout_constraintRight_toLeftOf="@+id/aplus"
-                android:layout_marginRight="8dp" />
+                app:layout_constraintTop_toBottomOf="@+id/freqseek_a" />
 
             <Button
                 android:id="@+id/cminus"
                 android:layout_width="25dp"
-                android:layout_height="18dp"
+                android:layout_height="24dp"
                 android:layout_marginLeft="0dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:background="@android:drawable/ic_media_rew"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/freqseek_c" />
@@ -296,7 +297,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="0dp"
                 android:layout_marginTop="11dp"
-                android:text="SQUARE | SINE | SAW"
+                android:text="WAVEFORM"
                 android:textColor="@android:color/background_light"
                 android:textSize="10sp"
                 android:textStyle="bold"
@@ -305,7 +306,7 @@
 
             <TextView
                 android:id="@+id/textView14"
-                android:layout_width="wrap_content"
+                android:layout_width="65dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
@@ -343,16 +344,15 @@
                 android:id="@+id/frequency_c"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:layout_marginTop="8dp"
                 android:text="     "
                 android:textColor="@android:color/background_light"
                 android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@+id/freqseek_c"
                 app:layout_constraintLeft_toRightOf="@+id/cminus"
-                android:layout_marginLeft="8dp"
                 app:layout_constraintRight_toLeftOf="@+id/cplus"
-                android:layout_marginRight="8dp" />
+                app:layout_constraintTop_toBottomOf="@+id/freqseek_c" />
 
             <TextView
                 android:id="@+id/textView7"
@@ -361,7 +361,7 @@
                 android:layout_marginRight="0dp"
 
                 android:layout_marginTop="11dp"
-                android:text="SQUARE | SINE | SAW"
+                android:text="WAVEFORM"
                 android:textColor="@android:color/background_light"
                 android:textSize="10sp"
                 android:textStyle="bold"
@@ -372,16 +372,15 @@
                 android:id="@+id/frequency_b"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:layout_marginTop="8dp"
                 android:text="     "
                 android:textColor="@android:color/background_light"
                 android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@+id/freqseek_b"
                 app:layout_constraintLeft_toRightOf="@+id/bminus"
-                android:layout_marginLeft="8dp"
                 app:layout_constraintRight_toLeftOf="@+id/bplus"
-                android:layout_marginRight="8dp" />
+                app:layout_constraintTop_toBottomOf="@+id/freqseek_b" />
 
             <TextView
                 android:id="@+id/textView5"
@@ -390,7 +389,7 @@
                 android:layout_marginRight="0dp"
 
                 android:layout_marginTop="11dp"
-                android:text="SQUARE | SINE | SAW"
+                android:text="WAVEFORM"
                 android:textColor="@android:color/background_light"
                 android:textSize="10sp"
                 android:textStyle="bold"
@@ -424,7 +423,7 @@
 
             <TextView
                 android:id="@+id/textView15"
-                android:layout_width="wrap_content"
+                android:layout_width="65dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
@@ -437,57 +436,57 @@
             <Button
                 android:id="@+id/bminus"
                 android:layout_width="25dp"
-                android:layout_height="18dp"
+                android:layout_height="24dp"
                 android:layout_marginLeft="0dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:background="@android:drawable/ic_media_rew"
-                app:layout_constraintLeft_toLeftOf="parent"
                 android:soundEffectsEnabled="false"
+                app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/freqseek_b" />
 
             <Button
                 android:id="@+id/cplus"
                 android:layout_width="25dp"
-                android:layout_height="18dp"
+                android:layout_height="24dp"
                 android:layout_marginLeft="50dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:background="@android:drawable/ic_media_ff"
-                app:layout_constraintLeft_toRightOf="@+id/cminus"
                 android:soundEffectsEnabled="false"
+                app:layout_constraintLeft_toRightOf="@+id/cminus"
                 app:layout_constraintTop_toBottomOf="@+id/freqseek_c" />
 
             <Button
                 android:id="@+id/bplus"
                 android:layout_width="25dp"
-                android:layout_height="18dp"
+                android:layout_height="24dp"
                 android:layout_marginLeft="50dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:background="@android:drawable/ic_media_ff"
-                app:layout_constraintLeft_toRightOf="@+id/bminus"
                 android:soundEffectsEnabled="false"
+                app:layout_constraintLeft_toRightOf="@+id/bminus"
                 app:layout_constraintTop_toBottomOf="@+id/freqseek_b" />
 
             <Button
                 android:id="@+id/aplus"
                 android:layout_width="25dp"
-                android:layout_height="18dp"
+                android:layout_height="24dp"
                 android:layout_marginLeft="50dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:background="@android:drawable/ic_media_ff"
                 android:gravity="fill_vertical"
-                app:layout_constraintLeft_toRightOf="@+id/aminus"
                 android:soundEffectsEnabled="false"
+                app:layout_constraintLeft_toRightOf="@+id/aminus"
                 app:layout_constraintTop_toBottomOf="@+id/freqseek_a" />
 
             <Button
                 android:id="@+id/aminus"
                 android:layout_width="25dp"
-                android:layout_height="18dp"
+                android:layout_height="24dp"
                 android:layout_marginLeft="0dp"
-                android:layout_marginTop="8dp"
-                android:soundEffectsEnabled="false"
+                android:layout_marginTop="4dp"
                 android:background="@android:drawable/ic_media_rew"
                 android:gravity="fill_vertical"
+                android:soundEffectsEnabled="false"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/freqseek_a" />
 
@@ -499,11 +498,11 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="-114dp"
                 android:background="@color/black_overlay"
                 android:checked="false"
-                android:textColor="@android:color/background_light"
                 android:soundEffectsEnabled="false"
+                android:textColor="@android:color/background_light"
                 android:textOff="START"
                 android:textOn="STOP"
                 android:textStyle="bold"
@@ -605,6 +604,46 @@
                     android:thumb="@drawable/thumb" />
 
             </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/wavebi"
+                android:layout_width="70dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="1dp"
+                android:adjustViewBounds="true"
+                android:background="@drawable/sinewave_icon"
+                android:cropToPadding="true"
+                android:scaleType="fitXY"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+                android:layout_marginRight="8dp"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginLeft="8dp"
+                app:layout_constraintLeft_toLeftOf="parent" />
+
+            <ImageButton
+                android:id="@+id/waveci"
+                android:layout_width="70dp"
+                android:layout_height="40dp"
+                android:layout_marginRight="28dp"
+                android:layout_marginTop="0dp"
+                android:adjustViewBounds="true"
+                android:background="@drawable/sinewave_icon"
+                android:cropToPadding="true"
+                android:scaleType="fitXY"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+
+            <ImageButton
+                android:id="@+id/waveai"
+                android:layout_width="70dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="26dp"
+                android:layout_marginTop="0dp"
+                android:background="@drawable/sinewave_icon"
+                android:cropToPadding="true"
+                android:scaleType="fitXY"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 
         </android.support.constraint.ConstraintLayout>
 

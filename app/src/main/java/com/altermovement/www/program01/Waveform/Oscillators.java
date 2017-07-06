@@ -37,15 +37,17 @@ public class Oscillators implements Runnable{
 
     // DATAPOINT AND GRAPH SERIES
 
-    private DataPoint[] datapp;
-    private LineGraphSeries<DataPoint> waveseries;
+    private static LineGraphSeries<DataPoint> waveseries;
+
+    // AudioTrack
+
+    private static AudioTrack myWave;
 
     private synchronized void setWave() {
 
         // AUDIOTRACK INIT PARAMETERS
 
-       int rate = AudioTrack.getNativeOutputSampleRate(AudioManager.STREAM_MUSIC);
-//        int rate = 48000;
+        int rate = AudioTrack.getNativeOutputSampleRate(AudioManager.STREAM_MUSIC);
         int minSize = AudioTrack.getMinBufferSize(rate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT);
 
         int sizes[] = {1024, 2048, 4096, 8192, 16384, 32768};
@@ -58,7 +60,7 @@ public class Oscillators implements Runnable{
             }
         }
 
-        AudioTrack myWave = new AudioTrack(AudioManager.STREAM_MUSIC, rate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT, size, AudioTrack.MODE_STREAM);
+        myWave = new AudioTrack(AudioManager.STREAM_MUSIC, rate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT, size, AudioTrack.MODE_STREAM);
 
         int state = myWave.getState();
 
@@ -66,9 +68,6 @@ public class Oscillators implements Runnable{
             myWave.release();
             return;
         }
-
-//        myWave.play();
-
 
         // MOD BOOLEAN INITIAL STATE = FALSE
 
@@ -109,7 +108,6 @@ public class Oscillators implements Runnable{
         // ITERATOR PARAMETERS
 
         int x = 0;
-        int y = 0;
         int i;
 
         // GRAPH ARRAY DATA SIZE
@@ -117,7 +115,7 @@ public class Oscillators implements Runnable{
 
         // GRAPH INIT PARAMETERS
 
-        datapp = new DataPoint[datasize];
+        DataPoint[] datapp = new DataPoint[datasize];
 
         oscillator.graphview.getViewport().setXAxisBoundsManual(true);
         oscillator.graphview.getViewport().setMinX(4);
@@ -281,9 +279,10 @@ public class Oscillators implements Runnable{
                         break;
                 }
 
-                short three = 3;
-                short temp_a = (short)((samples_a[i] + samples_b[i] + samples_c[i]) / three);
-                samples[i] = (short) (temp_a  * amplitude / 32767);
+//                short three = 3;
+//                short temp_a = (short)((samples_a[i] + samples_b[i] + samples_c[i]) / three);
+                samples[i] = (short) (mixwaves(samples_a[i], samples_b[i], samples_c[i]) * amplitude / 32767);
+//                samples[i] = (short) (temp_a  * amplitude / 32767);
 
                 if (x >= datasize) {
                     x = 0;
@@ -293,18 +292,10 @@ public class Oscillators implements Runnable{
                     datapp[x] = new DataPoint(x, temp_graph);
                     x += 1;
                 }
-
-
             }
-            myWave.write(samples, 0, samples.length);
-//
-//            new Thread(new Runnable() {
-//                public void run() {
-                    waveseries.resetData(datapp);
-//                }
-//
-//            }).start();
 
+            writebuffer(samples);
+            writeseries(datapp);
         }
 
         myWave.stop();
@@ -313,10 +304,8 @@ public class Oscillators implements Runnable{
 
     public void start() {
 
-        amplitude = 32767;
         thread = new Thread(this, "myWave");
         thread.start();
-
     }
 
     public void stop() {
@@ -335,43 +324,34 @@ public class Oscillators implements Runnable{
         setWave();
     }
 
-    private short modulate(short am, double ph, double fph, short fm) {
+    private static short modulate(short am, double ph, double fph, short fm) {
         return (short) (am * Math.cos(ph + fm * Math.sin(fph)));
     }
 
-    private short square(int am, double ph) {
+    private static short square(int am, double ph) {
         return (short) Math.round(am * Math.signum(Math.sin(ph)));
-
-//        return (short)(am * Math.signum( Math.sin(ph) ));
     }
 
-    private short sine(int am, double ph) {
+    private static short sine(int am, double ph) {
         return (short)(am * Math.sin(ph));
     }
 
-    private short saw(int am, double ph) {
+    private static short saw(int am, double ph) {
         return (short) Math.round(am * Math.round((ph) / Math.PI));
     }
 
-    private double getphase(double twopi, double phase, int rate, int freq){
-        if (phase < twopi) {
-            phase += twopi * freq * rate;
-        } else {
-            phase += (twopi * freq / rate) - (2 * Math.PI);
-        }
-        return phase;
+    private static void writebuffer(short[] shortbuffer){
+        myWave.write(shortbuffer, 0, shortbuffer.length);
     }
 
+    private static void writeseries(DataPoint[] series){
+        waveseries.resetData(series);
+    }
 
-
-//    class gograph extends AsyncTask<DataPoint[], Void, Void>{
-//
-//        @Override
-//        protected Void doInBackground(DataPoint[]... dataPoint) {
-//            waveseries.resetData(dataPoint[0]);
-//            return null;
-//        }
-//    }
+    private static short mixwaves(short wavea, short waveb, short wavec){
+        short three = 3;
+        return (short)((wavea + waveb + wavec) / three);
+    }
 
 }
 

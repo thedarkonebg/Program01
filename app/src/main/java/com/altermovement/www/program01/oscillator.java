@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -61,6 +62,10 @@ public class oscillator extends Activity implements View.OnClickListener {
     SeekBar modulate_amp;
 
     ToggleButton startstop;
+
+    ImageView waveicona;
+    ImageView waveiconb;
+    ImageView waveiconc;
 
 
 
@@ -215,6 +220,17 @@ public class oscillator extends Activity implements View.OnClickListener {
             @Override
             public void onProgressChanged(SeekBar wavemode_a, int progressValue, boolean fromUser) {
                 wave.mode_a = (wavemode_a.getProgress() + 1);
+                switch (wavemode_a.getProgress()) {
+                    case 0:
+                        waveicona.setBackgroundResource(R.drawable.squarewave_icon);
+                        break;
+                    case 1:
+                        waveicona.setBackgroundResource(R.drawable.sinewave_icon);
+                        break;
+                    case 2:
+                        waveicona.setBackgroundResource(R.drawable.triangularwave_icon);
+                        break;
+                }
             }
 
             @Override
@@ -235,6 +251,17 @@ public class oscillator extends Activity implements View.OnClickListener {
             @Override
             public void onProgressChanged(SeekBar wavemode_b, int progressValue, boolean fromUser) {
                 wave.mode_b = (wavemode_b.getProgress() + 1);
+                switch (wavemode_b.getProgress()) {
+                    case 0:
+                        waveiconb.setBackgroundResource(R.drawable.squarewave_icon);
+                        break;
+                    case 1:
+                        waveiconb.setBackgroundResource(R.drawable.sinewave_icon);
+                        break;
+                    case 2:
+                        waveiconb.setBackgroundResource(R.drawable.triangularwave_icon);
+                        break;
+                }
             }
 
             @Override
@@ -255,6 +282,17 @@ public class oscillator extends Activity implements View.OnClickListener {
             @Override
             public void onProgressChanged(SeekBar wavemode_c, int progressValue, boolean fromUser) {
                 wave.mode_c = (wavemode_c.getProgress() + 1);
+                switch (wavemode_c.getProgress()){
+                    case 0:
+                        waveiconc.setBackgroundResource(R.drawable.squarewave_icon);
+                        break;
+                    case 1:
+                        waveiconc.setBackgroundResource(R.drawable.sinewave_icon);
+                        break;
+                    case 2:
+                        waveiconc.setBackgroundResource(R.drawable.triangularwave_icon);
+                        break;
+                }
             }
 
             @Override
@@ -374,11 +412,13 @@ public class oscillator extends Activity implements View.OnClickListener {
                 wavefrequency_c.setProgress(wavefrequency_c.getProgress() + 1);
             }
         });
-
-
     }
 
     private void initializeView() {
+
+        waveicona = (ImageView) findViewById(R.id.waveai);
+        waveiconb = (ImageView) findViewById(R.id.wavebi);
+        waveiconc = (ImageView) findViewById(R.id.waveci);
 
         aminus = (Button) findViewById(R.id.aminus);
         bminus = (Button) findViewById(R.id.bminus);
@@ -432,6 +472,7 @@ public class oscillator extends Activity implements View.OnClickListener {
 
     @Override
     protected void onDestroy() {
+
         super.onDestroy();
         if (wave != null)
             wave.stop();
@@ -439,12 +480,14 @@ public class oscillator extends Activity implements View.OnClickListener {
 
     @Override
     public void onPause() {
+
         super.onPause();
         if (wave != null)
             wave.stop();
     }
 
     public void fadeout(){
+
         int targetVol = 0;
         int STEP_DOWN=2;
         currentVol = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
@@ -471,8 +514,6 @@ public class oscillator extends Activity implements View.OnClickListener {
         int STEP_UP=2;
         currentVol = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, 0);
-
-
 
         wave.frequency_a = (wavefreq_min + wavefrequency_a.getProgress()) * 5;
         wave.frequency_b = (wavefreq_min + wavefrequency_b.getProgress()) * 5;
@@ -504,20 +545,22 @@ public class oscillator extends Activity implements View.OnClickListener {
             audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, initialVol + STEP_UP,0);
             initialVol = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
         }
-
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+
         if (keyCode == KeyEvent.KEYCODE_BACK
                 && event.getRepeatCount() == 0) {
             Log.d("CDA", "onKeyDown Called");
             onBackPressed();
         }
+
         return super.onKeyDown(keyCode, event);
     }
 
     public void onBackPressed() {
+
         Log.d("CDA", "onBackPressed Called");
         Intent ob = new Intent(oscillator.this, mainmenu.class);
         startActivity(ob);
