@@ -5,7 +5,8 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="black_overlay">#80000000</color>
-    <color name="white_overlay">#80ffffff</color>
-    <color name="blue_overlay">#80006999</color>
+    <color name="white_overlay">#80959595</color>
+    <color name="blue_overlay">#806cbfe7</color>
+    <color name="aaa">#c8e3e3e3</color>
 
 </resources>
