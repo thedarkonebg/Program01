@@ -1,4 +1,4 @@
-package com.altermovement.www.program01;
+package com.altermovement.www.program01.Controls;
 
 import android.app.Activity;
 import android.app.Dialog;

@@ -58,7 +58,7 @@ public class splashscreen extends Activity {
 				logo.setAlpha(0f);
 				logo.animate()
 						.alpha(1f)
-						.setDuration(500)
+						.setDuration(400)
 						.x(0)
 						.scaleX(1)
 						.scaleY(1);
@@ -73,7 +73,7 @@ public class splashscreen extends Activity {
 				logo.setAlpha(1f);
 				logo.animate()
 						.alpha(0f)
-						.setDuration(1000);
+						.setDuration(600);
 			}
 		};
 
@@ -84,7 +84,7 @@ public class splashscreen extends Activity {
 				appname.setAlpha(0f);
 				appname.animate()
 						.alpha(1f)
-						.setDuration(500)
+						.setDuration(400)
 						.scaleX(1)
 						.scaleY(1);
 			}
@@ -97,11 +97,11 @@ public class splashscreen extends Activity {
 				appname.setAlpha(1f);
 				appname.animate()
 						.alpha(0f)
-						.setDuration(1000);
+						.setDuration(600);
 				appname.setAlpha(1f);
 				background.animate()
 						.alpha(0f)
-						.setDuration(500);
+						.setDuration(600);
 			}
 		};
 
@@ -113,11 +113,11 @@ public class splashscreen extends Activity {
 			}
 		};
 
-		handler.postDelayed(logofi, 1000);
-		handler.postDelayed(logofo, 3000);
-		handler.postDelayed(apptextfi, 4000);
-		handler.postDelayed(apptextfo, 6000);
-		handler.postDelayed(finishsplash, 7000);
+		handler.postDelayed(logofi, 1);
+		handler.postDelayed(logofo, 1000);
+		handler.postDelayed(apptextfi, 2000);
+		handler.postDelayed(apptextfo, 3000);
+		handler.postDelayed(finishsplash, 4000);
 	}
 
 	@Override

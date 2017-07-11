@@ -63,6 +63,9 @@
             android:name=".DJPlayer"
             android:label="@string/title_activity_djplayer"
             android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
     </application>
 

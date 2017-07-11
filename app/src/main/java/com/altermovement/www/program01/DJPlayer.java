@@ -15,7 +15,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.altermovement.www.program01.Controls.OpenFile;
 import com.maxproj.simplewaveform.SimpleWaveform;
 
 import java.io.File;
@@ -50,12 +52,25 @@ public class DJPlayer extends Activity {
 
     // CHOOSE FILE DIALOG WINDOW //
 
-    OpenFile        filedialog;
+    OpenFile filedialog;
 
     // AUDIO MODULES //
 
     AudioManager audioManager;
     AudioTrack audioTrack;
+
+    // CONTROL VARIABLES //
+
+    private double pitch_coeff;
+    private int sw_case = 0;
+    private double pitch_factor = 0.02;
+    private double temp_coeff_max;
+
+    // INFO TOAST //
+
+    Toast toast;
+    Toast toast1;
+    Toast toast2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +94,131 @@ public class DJPlayer extends Activity {
                 filedialog.showDialog();
             }
         });
+
+        // PITCH CONTROLS //
+
+        seekbar_pitch.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
+                temp_coeff_max = seekbar_pitch.getMax() * pitch_factor;
+
+                int temp_coeff = seekbar_pitch.getProgress();
+                if (temp_coeff == 0){
+                    pitch_coeff = - temp_coeff_max * 0.5;
+                } else {
+                    pitch_coeff = (temp_coeff * pitch_factor) - temp_coeff_max * 0.5;
+                }
+                text_pitch.setText(String.format("%.2f", pitch_coeff));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                temp_coeff_max = seekbar_pitch.getMax() * pitch_factor;
+                double temp_coeff = seekbar_pitch.getProgress();
+                if (temp_coeff == 0){
+                    pitch_coeff = - temp_coeff_max * 0.5;
+                } else {
+                    pitch_coeff = (temp_coeff * pitch_factor) - temp_coeff_max * 0.5;
+                }
+                text_pitch.setText(String.format("%.2f", pitch_coeff));
+            }
+        });
+
+        button_pitchplus.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                seekbar_pitch.setProgress(seekbar_pitch.getProgress() + 1);
+            }
+        });
+
+        button_pitchminus.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                seekbar_pitch.setProgress(seekbar_pitch.getProgress() - 1);
+            }
+        });
+
+        // PITCH RANGE CHANGER //
+
+        button_range.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                int temp_progress;
+                switch (sw_case) {
+
+                    case 0:
+
+                        temp_progress = seekbar_pitch.getProgress();
+                        seekbar_pitch.setMax(400);
+                        pitch_factor = 0.05;
+
+                        seekbar_pitch.setProgress(temp_progress * 400 / 600);
+
+                        temp_coeff_max = seekbar_pitch.getMax() * pitch_factor;
+                        text_pitch.setText(String.format("%.2f", (seekbar_pitch.getProgress() * pitch_factor) - temp_coeff_max * 0.5));
+                        toast = Toast.makeText(getApplicationContext(), "RANGE +/- 10 %", Toast.LENGTH_SHORT);
+
+                        sw_case += 1;
+
+                        if (toast2 == null) {
+                            break;
+                        }
+
+                        toast2.cancel();
+                        toast.show();
+                        break;
+
+                    case 1:
+
+                        temp_progress = seekbar_pitch.getProgress();
+                        seekbar_pitch.setMax(640);
+                        pitch_factor = 0.05;
+
+                        seekbar_pitch.setProgress(temp_progress * 640 / 400);
+
+                        temp_coeff_max=(int)(seekbar_pitch.getMax() * pitch_factor);
+                        text_pitch.setText(String.format("%.2f", (seekbar_pitch.getProgress() * pitch_factor) - temp_coeff_max * 0.5));
+                        toast1 = Toast.makeText(getApplicationContext(), "RANGE +/- 16 %", Toast.LENGTH_SHORT);
+
+                        sw_case += 1;
+
+                        if (toast == null) {
+                            break;
+                        }
+
+                        toast.cancel();
+                        toast1.show();
+                        break;
+
+                    case 2:
+
+                        temp_progress = seekbar_pitch.getProgress();
+                        seekbar_pitch.setMax(600);
+                        pitch_factor = 0.02;
+
+                        seekbar_pitch.setProgress(temp_progress * 600 / 640);
+
+                        temp_coeff_max=(int)(seekbar_pitch.getMax() * pitch_factor);
+                        text_pitch.setText(String.format("%.2f", (seekbar_pitch.getProgress() * pitch_factor) - temp_coeff_max * 0.5));
+                        toast2 = Toast.makeText(getApplicationContext(), "RANGE +/- 6 %", Toast.LENGTH_SHORT);
+
+                        sw_case = 0;
+
+                        if (toast1 == null) {
+                            break;
+                        }
+
+                        toast1.cancel();
+                        toast2.show();
+                        break;
+                }
+
+            }
+        });
+
     }
 
     private void initializeView() {
@@ -104,6 +244,8 @@ public class DJPlayer extends Activity {
         button_range = (Button) findViewById(R.id.button_range);
 
         seekbar_pitch = (SeekBar) findViewById(R.id.seekbar_pitch);
+        seekbar_pitch.setMax(600);
+        seekbar_pitch.setProgress(300);
 
         image_disk = (ImageView) findViewById(R.id.image_disk);
 

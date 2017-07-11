@@ -10,7 +10,7 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@android:color/black"
         android:orientation="vertical">
 
@@ -46,8 +46,8 @@
 
                 <ImageButton
                     android:id="@+id/button_play"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
@@ -58,8 +58,8 @@
 
                 <ImageButton
                     android:id="@+id/button_cue"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="4dp"
                     android:layout_toRightOf="@+id/button_play"
@@ -68,22 +68,22 @@
 
                 <Button
                     android:id="@+id/button_bpm"
-                    android:layout_width="100dp"
+                    android:layout_width="80dp"
                     android:layout_height="40dp"
-                    android:layout_below="@+id/button_play"
+                    android:layout_below="@+id/button_load"
                     android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginTop="4dp"
+                    android:layout_toEndOf="@+id/button_cue"
+                    android:layout_toRightOf="@+id/button_cue"
                     android:text="BPM" />
 
                 <Button
                     android:id="@+id/button_load"
-                    android:layout_width="100dp"
+                    android:layout_width="80dp"
                     android:layout_height="40dp"
-                    android:layout_below="@+id/button_cue"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_toRightOf="@+id/button_bpm"
+                    android:layout_alignTop="@+id/button_cue"
+                    android:layout_marginLeft="8dp"
+                    android:layout_toEndOf="@+id/button_cue"
+                    android:layout_toRightOf="@+id/button_cue"
                     android:text="LOAD" />
             </RelativeLayout>
 
@@ -101,16 +101,22 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0">
 
-                <SeekBar
-                    android:id="@+id/seekbar_pitch"
-                    android:layout_width="match_parent"
+                <com.altermovement.www.program01.Controls.VerticalSeekBarWrapper
+                    android:layout_width="25dp"
                     android:layout_height="match_parent"
                     android:layout_above="@+id/button_pitchplus"
                     android:layout_below="@+id/button_pitchminus"
-                    android:max="100"
-                    android:progress="50"
-                    android:rotation="90"
-                    android:thumb="@drawable/thumb" />
+                    android:layout_centerHorizontal="true">
+
+                    <com.altermovement.www.program01.Controls.VerticalSeek
+                        android:id="@+id/seekbar_pitch"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:progressDrawable="@color/Black"
+                        android:splitTrack="false"
+                        android:thumb="@drawable/thumb"
+                        app:seekBarRotation="CW90" /> <!-- Rotation: CW90 or CW270 -->
+                </com.altermovement.www.program01.Controls.VerticalSeekBarWrapper>
 
                 <Button
                     android:id="@+id/button_pitchminus"
