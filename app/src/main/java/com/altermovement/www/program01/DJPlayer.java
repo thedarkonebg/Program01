@@ -1,9 +1,12 @@
 package com.altermovement.www.program01;
 
 import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -58,6 +61,7 @@ public class DJPlayer extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        overridePendingTransition(R.anim.anim_fadein, R.anim.anim_fadeout);
 
         setContentView(R.layout.player_layout);
         initializeView();
@@ -75,11 +79,6 @@ public class DJPlayer extends Activity {
                 filedialog.showDialog();
             }
         });
-
-
-
-
-
     }
 
     private void initializeView() {
@@ -112,4 +111,20 @@ public class DJPlayer extends Activity {
 
         filedialog = new OpenFile(this);
     }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_dialog_alert).setTitle("Exit")
+                .setMessage("Are you sure you want to exit?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent ob = new Intent(DJPlayer.this, mainmenu.class);
+                        startActivity(ob);
+                        DJPlayer.this.finish();
+                    }
+                }).setNegativeButton("No", null).show();
+    }
+
+
 }

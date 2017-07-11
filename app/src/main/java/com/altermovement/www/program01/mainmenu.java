@@ -70,7 +70,7 @@ public class mainmenu extends AppCompatActivity{
 			@Override
 			public void onClick(View v) {
 
-				//TODO
+				startActivity(new Intent(getApplicationContext(), DJPlayer.class));
 
 			}
 		});
