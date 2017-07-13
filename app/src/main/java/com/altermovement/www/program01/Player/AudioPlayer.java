@@ -28,17 +28,16 @@ import java.util.Formatter;
 import java.util.Locale;
 
 public class AudioPlayer {
-
-    DJPlayer djPlayer;
+    
     private Handler handler;
     private static final String TAG = "AudioPlayer";
 
     /**
-     *          PLAYER CONTROL BOOLEANS AND STATE IDENTIFIER
+     *          PLAYER CONTROL BOOLEANS AND TRACK STATE IDENTIFIER
      * **/
 
-    private boolean isPlaying = false;
-    private int i;
+    private boolean isPlaying = false;      // TRACK PLAY / STOP BOOLEAN // DEFAULT: FALSE
+    private int i;                          // Use in PLAY/CUE logic to get string trackstate[i] and identify track state
     private String[] trackstate = new String[]{"PLAY", "STOP", "LOOP"};
 
     /**
@@ -64,23 +63,27 @@ public class AudioPlayer {
 
         @Override
         public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-            Log.i(TAG,"onPlayerStateChanged: playWhenReady = "+String.valueOf(playWhenReady)
-                    +" playbackState = "+playbackState);
+            Log.i(TAG,"onPlayerStateChanged: playWhenReady = " + String.valueOf(playWhenReady) + " playbackState = " + playbackState);
+
             switch (playbackState){
+
                 case ExoPlayer.STATE_ENDED:
                     Log.i(TAG,"Playback ended!");
                     //Stop playback and return to start position
                     setPlayPause();
                     exoPlayer.seekTo(0);
                     break;
+
                 case ExoPlayer.STATE_READY:
                     Log.i(TAG,"ExoPlayer ready! pos: "+exoPlayer.getCurrentPosition()
                             +" max: "+stringForTime((int)exoPlayer.getDuration()));
                     setProgress();
                     break;
+
                 case ExoPlayer.STATE_BUFFERING:
                     Log.i(TAG,"Playback buffering!");
                     break;
+
                 case ExoPlayer.STATE_IDLE:
                     Log.i(TAG,"ExoPlayer idle!");
                     break;
@@ -99,7 +102,7 @@ public class AudioPlayer {
 
         @Override
         public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
-
+            Log.i(TAG, String.valueOf(playbackParameters));
         }
     };
 
@@ -108,7 +111,10 @@ public class AudioPlayer {
      * **/
 
     private void prepareExoPlayerFromFileUri(Uri uri){
-        exoPlayer = ExoPlayerFactory.newSimpleInstance(djPlayer.getApplicationContext(), new DefaultTrackSelector(), new DefaultLoadControl());
+
+        context =
+
+        exoPlayer = ExoPlayerFactory.newSimpleInstance(DJPlayer.getContext(), new DefaultTrackSelector(), new DefaultLoadControl());
         exoPlayer.addListener(eventListener);
 
         DataSpec dataSpec = new DataSpec(uri);
@@ -137,6 +143,7 @@ public class AudioPlayer {
      * **/
 
     private String stringForTime(int timeMs) {
+
         StringBuilder mFormatBuilder;
         Formatter mFormatter;
         mFormatBuilder = new StringBuilder();
@@ -186,21 +193,19 @@ public class AudioPlayer {
      * **/
 
     public void setPlayPause(){
-        String value = trackstate[i];
-        switch(value){
+        switch(trackstate[i]){
 
             case "PLAY":
-                i = 3;
+                i = 2;
                 break;
 
             case "STOP":
-                i = 1;
+                i = 0;
                 break;
 
             case "LOOP":
-                i = 1;
+                i = 0;
                 break;
-
         }
     }
 
@@ -209,30 +214,28 @@ public class AudioPlayer {
      * **/
 
     public void setCue(){
-
         switch(trackstate[i]){
 
             case "PLAY":
-                i = 2;
+                i = 1;
                 break;
 
             case "STOP":
-                i = 2;
+                i = 1;
                 break;
 
             case "LOOP":
-                i = 2;
+                i = 1;
                 break;
-
         }
     }
 
     /**
-     *          GET FILE URI FROM FILE SELECTOR IN DJPLAYER ACTIVITY
+     *          => GET FILE URI FROM FILE SELECTOR IN DJPLAYER ACTIVITY
      *
-     *          LOAD FILE FROM URI [FROM EXTERNAL DRIVE]
+     *          => LOAD FILE FROM URI [FROM EXTERNAL DRIVE]
      *
-     *          SUPPORTED FORMATS =  MP3 || OGG || WAV || AAC
+     *          SUPPORTED FORMATS = { MP3 ; OGG ; WAV ; AAC }
      * **/
 
     public void setAudiofile(File file){

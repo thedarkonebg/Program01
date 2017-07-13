@@ -1,6 +1,7 @@
 package com.altermovement.www.program01;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.AudioManager;
@@ -59,6 +60,10 @@ public class DJPlayer extends Activity {
 
     AudioPlayer audioPlayer;
 
+    // CONTEXT //
+
+    private static Context mContext;
+
     // AUDIO MODULES //
 
     AudioManager audioManager;
@@ -85,7 +90,7 @@ public class DJPlayer extends Activity {
 
         setContentView(R.layout.player_layout);
         initializeView();
-
+        mContext = getApplicationContext();
         button_load.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
@@ -294,5 +299,8 @@ public class DJPlayer extends Activity {
                 }).setNegativeButton("No", null).show();
     }
 
+    public static Context getContext() {
+        return mContext;
+    }
 
 }
