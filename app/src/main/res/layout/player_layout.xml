@@ -64,7 +64,7 @@
                     android:layout_marginTop="4dp"
                     android:layout_toRightOf="@+id/button_play"
                     android:background="@drawable/cue_button"
-                    android:scaleType="fitXY" />
+                    android:scaleType="fitXY"/>
 
                 <Button
                     android:id="@+id/button_bpm"

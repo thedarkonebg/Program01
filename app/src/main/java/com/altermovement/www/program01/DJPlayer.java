@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.altermovement.www.program01.Controls.OpenFile;
+import com.altermovement.www.program01.Player.AudioPlayer;
 import com.maxproj.simplewaveform.SimpleWaveform;
 
 import java.io.File;
@@ -54,6 +55,10 @@ public class DJPlayer extends Activity {
 
     OpenFile filedialog;
 
+    // AUDIO PLAYER //
+
+    AudioPlayer audioPlayer;
+
     // AUDIO MODULES //
 
     AudioManager audioManager;
@@ -86,7 +91,7 @@ public class DJPlayer extends Activity {
 
                 filedialog.setFileListener(new OpenFile.FileSelectedListener() {
                     @Override public void fileSelected(final File file) {
-                        filename = file.getAbsolutePath();
+                        audioPlayer.setAudiofile(file);
                         Log.d("File", filename);
                     }
                 });
@@ -94,6 +99,26 @@ public class DJPlayer extends Activity {
                 filedialog.showDialog();
             }
         });
+
+        // PLAY AND CUE //
+
+        button_play.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                audioPlayer.setPlayPause();
+
+            }
+        });
+
+        button_cue.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                audioPlayer.setCue();
+
+            }
+        });
+
+
 
         // PITCH CONTROLS //
 
@@ -252,6 +277,7 @@ public class DJPlayer extends Activity {
         waveform = (SimpleWaveform) findViewById(R.id.simplewaveform);
 
         filedialog = new OpenFile(this);
+        audioPlayer = new AudioPlayer();
     }
 
     @Override

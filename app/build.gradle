@@ -44,6 +44,7 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.google.android.exoplayer:exoplayer:r2.4.3'
     compile 'com.maxproj.simplewaveform:app:1.0.0'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
