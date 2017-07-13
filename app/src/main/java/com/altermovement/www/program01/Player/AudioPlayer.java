@@ -33,13 +33,17 @@ public class AudioPlayer {
     private Handler handler;
     private static final String TAG = "AudioPlayer";
 
-    /** ======= PLAYER CONTROL BOOLEANS AND STATE IDENTIFIER ======= **/
+    /**
+     *          PLAYER CONTROL BOOLEANS AND STATE IDENTIFIER
+     * **/
 
     private boolean isPlaying = false;
     private int i;
     private String[] trackstate = new String[]{"PLAY", "STOP", "LOOP"};
 
-    /** INITIALIZE EXO PLAYER AND EVENT LISTENERS **/
+    /**
+     *          INITIALIZE EXO PLAYER AND EVENT LISTENERS
+     * **/
 
     private SimpleExoPlayer exoPlayer;
     private ExoPlayer.EventListener eventListener = new ExoPlayer.EventListener() {
@@ -99,7 +103,9 @@ public class AudioPlayer {
         }
     };
 
-    /** ======= LOAD TRACK TO EXO PLAYER ======= **/
+    /**
+     *          LOAD TRACK TO EXO PLAYER
+     * **/
 
     private void prepareExoPlayerFromFileUri(Uri uri){
         exoPlayer = ExoPlayerFactory.newSimpleInstance(djPlayer.getApplicationContext(), new DefaultTrackSelector(), new DefaultLoadControl());
@@ -126,7 +132,9 @@ public class AudioPlayer {
 
     }
 
-    /** ======= GENERATE TRACK CURRENT AND TOTAL TIME ======= **/
+    /**
+     *          GENERATE TRACK CURRENT AND TOTAL TIME
+     * **/
 
     private String stringForTime(int timeMs) {
         StringBuilder mFormatBuilder;
@@ -147,17 +155,20 @@ public class AudioPlayer {
         }
     }
 
-    /** ======= SET DJPLAYER PROGRESS BAR TO TRACK CURRENT PROGRESS ======= **/
+    /**
+     *          SET DJPLAYER PROGRESS BAR TO TRACK CURRENT PROGRESS
+     * **/
 
     private void setProgress() {
 
         if(handler == null)handler = new Handler();
+
         //Make sure you update Seekbar on UI thread
+
         handler.post(new Runnable() {
             @Override
             public void run() {
                 if (exoPlayer != null && isPlaying) {
-
                     int mCurrentPosition = (int) exoPlayer.getCurrentPosition() / 1000;
                     handler.postDelayed(this, 1000);
                 }
@@ -166,9 +177,10 @@ public class AudioPlayer {
     }
 
     /**
-     *          AUDIO PLAYER PUBLIC INTERFACE  =>
-     *
-     *          #############################
+     *          AUDIO PLAYER PUBLIC INTERFACE
+     *          => GET PARAMS || GET ARGS
+     *          => SET PARAMS || SET ARGS
+     *          <= RETURN DISPLAY DATA
      *
      *          PLAY BUTTON LOGIC [SET TRACK STATE]
      * **/
