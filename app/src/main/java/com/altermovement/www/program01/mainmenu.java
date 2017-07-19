@@ -1,17 +1,17 @@
 package com.altermovement.www.program01;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 
 
-public class mainmenu extends AppCompatActivity{
+public class mainmenu extends Activity {
 	@Override
 
 	protected void onCreate(Bundle savedInstanceState) {
@@ -19,8 +19,6 @@ public class mainmenu extends AppCompatActivity{
 		super.onCreate(savedInstanceState);
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-		getSupportActionBar().hide();
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		overridePendingTransition(R.anim.anim_fadein, R.anim.anim_fadeout);

@@ -1,11 +1,11 @@
 package com.altermovement.www.program01;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import java.util.Arrays;
 
-public class converter extends AppCompatActivity {
+public class converter extends Activity {
 
     @SuppressWarnings("ConstantConditions")
     public void hideSoftKeyboard() {
@@ -52,8 +52,6 @@ public class converter extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        getSupportActionBar().hide();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         overridePendingTransition(R.anim.anim_fadein, R.anim.anim_fadeout);

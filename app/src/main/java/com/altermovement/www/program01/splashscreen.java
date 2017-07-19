@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 import static com.altermovement.www.program01.R.layout.splash;
@@ -26,6 +27,7 @@ public class splashscreen extends Activity {
 		Log.d(LOG_TAG, "onCreate: savedInstanceState = " + (savedInstanceState == null ? "NULL" : "Not NULL"));
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		setContentView(splash);
 
@@ -114,9 +116,9 @@ public class splashscreen extends Activity {
 		};
 
 		handler.postDelayed(logofi, 1);
-		handler.postDelayed(logofo, 1000);
+		handler.postDelayed(logofo, 1800);
 		handler.postDelayed(apptextfi, 2000);
-		handler.postDelayed(apptextfo, 3000);
+		handler.postDelayed(apptextfo, 3400);
 		handler.postDelayed(finishsplash, 4000);
 	}
 

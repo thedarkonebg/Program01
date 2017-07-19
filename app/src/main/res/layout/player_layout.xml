@@ -6,14 +6,23 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     tools:layout_editor_absoluteX="8dp"
+    android:background="@android:color/black"
     tools:layout_editor_absoluteY="8dp">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/black"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <ProgressBar
+            android:id="@+id/load_file_progressbar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            app:layout_constraintBottom_toBottomOf="@+id/constraintLayout"
+            app:layout_constraintLeft_toLeftOf="@+id/constraintLayout"
+            app:layout_constraintRight_toRightOf="@+id/constraintLayout"
+            app:layout_constraintTop_toTopOf="@+id/constraintLayout" />
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="0dp"
@@ -42,7 +51,9 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@+id/layout_pitch">
+                app:layout_constraintRight_toLeftOf="@+id/layout_pitch"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp">
 
                 <ImageButton
                     android:id="@+id/button_play"
@@ -94,7 +105,6 @@
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
                 android:layout_marginTop="4dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -112,7 +122,7 @@
                         android:id="@+id/seekbar_pitch"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:progressDrawable="@color/Black"
+                        android:progressDrawable="@color/black_overlay"
                         android:splitTrack="false"
                         android:thumb="@drawable/thumb"
                         app:seekBarRotation="CW90" /> <!-- Rotation: CW90 or CW270 -->
@@ -159,7 +169,8 @@
                 app:layout_constraintBottom_toTopOf="@+id/relativeLayout3"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@+id/layout_pitch"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginEnd="8dp">
 
                 <ImageView
                     android:id="@+id/image_disk"
@@ -224,11 +235,12 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/relativeLayout2">
 
-                <com.maxproj.simplewaveform.SimpleWaveform
-                    android:id="@+id/simplewaveform"
+                <com.github.derlio.waveform.SimpleWaveformView
+                    android:id="@+id/waveform"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/white_overlay" />
+                    android:layout_height="56dp"
+                    app:indicatorColor="@android:color/white"
+                    app:waveformColor="@android:color/holo_red_dark" />
 
             </FrameLayout>
 
@@ -282,6 +294,9 @@
                     android:layout_alignBottom="@+id/textView23"
                     android:layout_toEndOf="@+id/textView23"
                     android:layout_toRightOf="@+id/textView23"
+                    android:ellipsize="marquee"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:singleLine="true"
                     android:text="Unknown Track"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -294,6 +309,9 @@
                     android:layout_alignBottom="@+id/textView22"
                     android:layout_toEndOf="@+id/textView22"
                     android:layout_toRightOf="@+id/textView22"
+                    android:ellipsize="marquee"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:singleLine="true"
                     android:text="Unknown Artist"
                     android:textSize="18sp"
                     android:textStyle="bold" />

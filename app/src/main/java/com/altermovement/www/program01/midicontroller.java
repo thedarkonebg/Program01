@@ -22,7 +22,6 @@ public class midicontroller extends Activity{
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
         overridePendingTransition(R.anim.anim_fadein, R.anim.anim_fadeout);
 
         setContentView(R.layout.activity_midicontroller);

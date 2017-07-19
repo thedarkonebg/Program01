@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
-import de.humatic.nmj.NMJConfig;
 import de.humatic.nmj.NMJSystemListener;
 import de.humatic.nmj.NetworkMidiListener;
 
@@ -20,7 +19,6 @@ public class midi_settings extends Activity implements NMJSystemListener, Networ
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         overridePendingTransition(R.anim.anim_fadein, R.anim.anim_fadeout);
 
-        NMJConfig.addSystemListener(this);
         setContentView(R.layout.midi_settings);
 
     }
